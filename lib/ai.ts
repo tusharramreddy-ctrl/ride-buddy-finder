@@ -37,8 +37,11 @@ async function askForJson<T>(opts: {
   effort: "minimal" | "low";
   fast?: boolean;
 }): Promise<T> {
-  const apiKey = process.env.OPENROUTER_API_KEY;
-  if (!apiKey) throw new AiUnavailableError("OPENROUTER_API_KEY is not set");
+  const apiKey = process.env.OPENROUTER_API_KEY?.trim();
+  if (!apiKey) {
+    console.error("OPENROUTER_API_KEY is not set, so AI features are switched off.");
+    throw new AiUnavailableError("OPENROUTER_API_KEY is not set");
+  }
 
   const deadline = AbortSignal.timeout(opts.totalMs);
   const body = JSON.stringify({
