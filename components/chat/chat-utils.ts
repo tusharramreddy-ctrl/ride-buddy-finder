@@ -1,11 +1,35 @@
+import { bikeInfo } from "@/lib/bikes";
 import { DEMO_GROUP_MESSAGES, findGroup, type Group } from "@/lib/demo";
-import { ME, type AppState, type Message } from "@/lib/model";
-import { findRider, type DemoRider } from "@/lib/riders";
+import { isUuid, ME, type AppState, type Message } from "@/lib/model";
+import { findRider, riderBike } from "@/lib/riders";
 
 // Chat URL convention (other screens link here):
-//   /chat/dm-<riderId>  direct conversation with a demo rider
+//   /chat/dm-<riderId>  direct conversation with a demo rider or a real rider (user id)
 //   /chat/g-<groupId>   group view / chat
 export const MAX_MESSAGE = 1000;
+
+// Who you're talking to in a direct conversation.
+export type ChatPartner = {
+  id: string;
+  name: string;
+  avatar: string | null;
+  subtitle: string;
+  bio: string;
+  demo: boolean;
+};
+
+export function partnerFor(id: string, state: AppState): ChatPartner | null {
+  const demo = findRider(id);
+  if (demo) {
+    return { id, name: demo.name, avatar: null, subtitle: `${demo.area} · ${demo.level} · ${riderBike(demo).label}`, bio: demo.bio, demo: true };
+  }
+  const p = state.profiles[id];
+  if (p) {
+    const bits = [p.region, p.level, p.primaryBike ? bikeInfo(p.primaryBike).label : null].filter(Boolean);
+    return { id, name: p.displayName, avatar: p.avatar, subtitle: bits.join(" · "), bio: p.bio, demo: false };
+  }
+  return null;
+}
 
 export function dmHref(riderId: string, draft?: string) {
   return `/chat/dm-${riderId}${draft ? `?draft=${encodeURIComponent(draft)}` : ""}`;
@@ -16,15 +40,16 @@ export function groupHref(groupId: string) {
 }
 
 export type ChatTarget =
-  | { kind: "dm"; id: string; rider: DemoRider }
+  | { kind: "dm"; id: string; partnerId: string }
   | { kind: "group"; id: string; group: Group }
   | { kind: "invalid"; id: string };
 
+// A real rider's id is a UUID; their profile may still be loading.
 export function parseChatId(raw: string): ChatTarget {
   const id = safeDecode(raw);
   if (id.startsWith("dm-")) {
-    const rider = findRider(id.slice(3));
-    if (rider) return { kind: "dm", id, rider };
+    const partnerId = id.slice(3);
+    if (findRider(partnerId) || isUuid(partnerId)) return { kind: "dm", id, partnerId };
   } else if (id.startsWith("g-")) {
     const group = findGroup(id.slice(2));
     if (group) return { kind: "group", id, group };
@@ -45,9 +70,15 @@ export function groupMessages(groupId: string, state: AppState): Message[] {
   return [...(DEMO_GROUP_MESSAGES[groupId] ?? []), ...(state.groupMessages[groupId] ?? [])].sort((a, b) => a.at - b.at);
 }
 
+// Demo members + other real members + you (if joined). Real numbers only.
 export function groupMemberCount(group: Group, state: AppState) {
   const joined = state.joinedGroups.includes(group.id);
-  return group.members.filter((m) => m !== ME).length + (joined ? 1 : 0);
+  const realOthers = state.groupMembers[group.id]?.length ?? 0;
+  return group.members.filter((m) => m !== ME).length + realOthers + (joined ? 1 : 0);
+}
+
+export function groupMemberIds(group: Group, state: AppState): string[] {
+  return [...group.members, ...(state.groupMembers[group.id] ?? [])];
 }
 
 export function memberLabel(n: number) {

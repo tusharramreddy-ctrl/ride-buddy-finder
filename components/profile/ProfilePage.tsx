@@ -2,12 +2,12 @@
 
 import Link from "next/link";
 import { useState } from "react";
-import { Bike, Gauge, MapPin, Pencil, Route, Timer } from "lucide-react";
+import { Bike, Gauge, LogOut, MapPin, Pencil, Route, Timer } from "lucide-react";
 import { bikeInfo } from "@/lib/bikes";
 import { CHARACTERS, GENDERS } from "@/lib/constants";
 import { formatDuration, formatKm } from "@/lib/geo";
 import { ME } from "@/lib/model";
-import { useStore } from "@/lib/store";
+import { signOut, useStore } from "@/lib/store";
 import { PostCard } from "../home/PostCard";
 import { RoutePreview } from "../RoutePreview";
 import { openComposer } from "../shell/composer-state";
@@ -26,7 +26,7 @@ export function ProfilePage() {
   const primary = state.garage.find((b) => b.primary);
   const myPosts = state.posts.filter((p) => p.authorId === ME);
   const rides = state.rides;
-  // Statistics are calculated only from rides saved on this device.
+  // Statistics are calculated only from your saved rides.
   const totalM = rides.reduce((s, r) => s + r.distanceM, 0);
   const totalSec = rides.reduce((s, r) => s + r.movingSec, 0);
   const sharedRidePosts = myPosts.filter((p) => p.kind === "ride").length;
@@ -45,9 +45,16 @@ export function ProfilePage() {
             <div className="rounded-full border-4 border-surface">
               <Avatar name={me.displayName} src={me.avatar} seed="me" size={88} />
             </div>
-            <Button variant="secondary" onClick={() => setEditOpen(true)}>
-              <Pencil className="h-4 w-4" /> Edit profile
-            </Button>
+            <div className="flex gap-2">
+              <Button variant="secondary" onClick={() => setEditOpen(true)}>
+                <Pencil className="h-4 w-4" /> Edit profile
+              </Button>
+              {state.auth.mode === "cloud" && (
+                <Button variant="ghost" onClick={() => void signOut()} className="lg:hidden">
+                  <LogOut className="h-4 w-4" /> Sign out
+                </Button>
+              )}
+            </div>
           </div>
           <h1 className="mt-3 font-display text-4xl font-extrabold uppercase leading-none">{me.displayName}</h1>
           <p className="text-muted">@{me.username}</p>
@@ -81,7 +88,7 @@ export function ProfilePage() {
           <h2 id="stats" className="font-display text-xl font-bold uppercase tracking-wide">
             Riding stats
           </h2>
-          <p className="text-xs text-muted">From rides saved on this device</p>
+          <p className="text-xs text-muted">From your saved rides</p>
         </div>
         <div className="grid grid-cols-2 gap-3 sm:grid-cols-3">
           <StatTile icon={<Route className="h-4 w-4" />} label="Rides completed" value={String(rides.length)} />

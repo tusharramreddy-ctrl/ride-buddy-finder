@@ -7,9 +7,11 @@ import { ccLabel } from "@/lib/bikes";
 import { CHARACTERS, slotLabel } from "@/lib/constants";
 import { DEMO_POSTS, GROUPS } from "@/lib/demo";
 import { formatMinutes } from "@/lib/geo";
+import { isUuid } from "@/lib/model";
 import { findRider, riderBike } from "@/lib/riders";
 import { blockRider, report, unblockRider, useStore } from "@/lib/store";
 import { PostCard, ReportDialog } from "../home/PostCard";
+import { RealRiderProfile } from "./RealRiderProfile";
 import { Avatar, Button, Card, Chip, DemoBadge, Dialog, EmptyState, Notice, Tabs, toast } from "../ui";
 
 type Tab = "posts" | "rides" | "bikes";
@@ -21,6 +23,7 @@ export function RiderProfile({ id }: { id: string }) {
   const [confirmBlock, setConfirmBlock] = useState(false);
   const [reporting, setReporting] = useState(false);
 
+  if (!rider && isUuid(id)) return <RealRiderProfile id={id} />;
   if (!rider) {
     return (
       <div className="mx-auto max-w-2xl px-4 py-10">
@@ -98,7 +101,7 @@ export function RiderProfile({ id }: { id: string }) {
 
       {blocked ? (
         <div className="mt-6">
-          <EmptyState title="You've blocked this rider" body="Their posts, comments and messages are hidden from you on this device." />
+          <EmptyState title="You've blocked this rider" body="Their posts, comments and messages are hidden from you." />
         </div>
       ) : (
         <div className="mt-6">
@@ -157,8 +160,7 @@ export function RiderProfile({ id }: { id: string }) {
 
       <Dialog open={confirmBlock} onClose={() => setConfirmBlock(false)} title={`Block ${rider.name}?`}>
         <p className="text-sm text-ink-2">
-          You won&apos;t see their posts, comments or messages, and they won&apos;t appear in your matches. Prototype: this only
-          applies on this device.
+          You won&apos;t see their posts, comments or messages, and they won&apos;t appear in your matches. You can unblock them any time.
         </p>
         <div className="mt-5 flex justify-end gap-2">
           <Button variant="ghost" onClick={() => setConfirmBlock(false)}>
@@ -183,7 +185,7 @@ export function RiderProfile({ id }: { id: string }) {
         onSubmit={(reason) => {
           report({ targetType: "rider", targetId: rider.id, reason });
           setReporting(false);
-          toast("Report saved on this device (prototype: no moderation team)");
+          toast("Report saved. No moderation team reviews reports yet.");
         }}
       />
     </div>

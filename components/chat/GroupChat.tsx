@@ -5,10 +5,10 @@ import { useState } from "react";
 import { ChevronDown, Info, MapPin, Users } from "lucide-react";
 import type { Group } from "@/lib/demo";
 import { ME, type Message } from "@/lib/model";
-import { personFor } from "@/lib/people";
+import { isCloud, personFor } from "@/lib/people";
 import { joinGroup, leaveGroup, sendGroupMessage, useStore } from "@/lib/store";
 import { Avatar, Button, Chip, DemoBadge, Notice, toast } from "../ui";
-import { groupMemberCount, groupMessages, memberLabel } from "./chat-utils";
+import { groupMemberCount, groupMemberIds, groupMessages, memberLabel } from "./chat-utils";
 import { ChatHeader, ConfirmDialog } from "./ChatParts";
 import { Composer } from "./Composer";
 import { MessageList } from "./MessageList";
@@ -63,7 +63,7 @@ export function GroupChat({ group, draft }: { group: Group; draft: string }) {
           </>
         }
       >
-        <span aria-hidden className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-ink text-accent">
+        <span aria-hidden className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-ink text-on-ink-accent">
           <Users className="h-5 w-5" />
         </span>
         <span className="min-w-0">
@@ -107,7 +107,7 @@ export function GroupChat({ group, draft }: { group: Group; draft: string }) {
                   </Link>
                 </li>
               )}
-              {group.members
+              {groupMemberIds(group, state)
                 .filter((id) => id !== ME)
                 .map((id) => {
                   const p = personFor(id, state);
@@ -115,7 +115,7 @@ export function GroupChat({ group, draft }: { group: Group; draft: string }) {
                   return (
                     <li key={id}>
                       <Link href={p.href} className="flex items-center gap-2.5 rounded-xl px-2 py-1.5 hover:bg-surface-2">
-                        <Avatar name={p.name} seed={p.id} size={32} />
+                        <Avatar name={p.name} src={p.avatar} seed={p.id} size={32} />
                         <span className="truncate text-sm font-medium text-ink">{p.name}</span>
                         {isBlocked ? (
                           <span className="text-xs font-semibold text-danger">Blocked</span>
@@ -139,7 +139,11 @@ export function GroupChat({ group, draft }: { group: Group; draft: string }) {
         onReport={(m) => setReporting(m)}
         top={
           <div className="mb-2 space-y-2">
-            <Notice>Demo group. Messages are saved on this device only and demo riders can&apos;t reply.</Notice>
+            <Notice>
+              {isCloud(state)
+                ? "Starter group with some demo riders (marked Demo), who can't reply. Real members see your messages."
+                : "Demo group. Messages are saved on this device only and demo riders can't reply."}
+            </Notice>
             {hiddenCount > 0 && (
               <p className="text-center text-xs text-muted">
                 {hiddenCount} {hiddenCount === 1 ? "message" : "messages"} from a blocked rider hidden

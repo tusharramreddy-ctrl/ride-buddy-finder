@@ -5,7 +5,8 @@ import { Camera, Trash } from "lucide-react";
 import { AREAS, CHARACTER_IDS, CHARACTERS, GENDERS, LEVELS, SLOTS, type Area, type CharacterId, type Gender, type Level, type SlotId } from "@/lib/constants";
 import { compressImage } from "@/lib/image";
 import type { MeProfile } from "@/lib/model";
-import { resetEverything, saveMe } from "@/lib/store";
+import { isCloud } from "@/lib/people";
+import { resetEverything, saveMe, useStore } from "@/lib/store";
 import { looksLikeText } from "@/lib/text";
 import { Avatar, Button, ChoicePills, Dialog, ErrorMessage, Field, inputClass, toast } from "../ui";
 import { QuizDialog } from "./QuizDialog";
@@ -33,6 +34,9 @@ function EditForm({ me, onClose }: { me: MeProfile; onClose: () => void }) {
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [quizOpen, setQuizOpen] = useState(false);
   const [confirmReset, setConfirmReset] = useState(false);
+  const [saving, setSaving] = useState(false);
+  const { state } = useStore();
+  const cloud = isCloud(state);
 
   async function pickAvatar(file: File | undefined) {
     if (!file) return;
@@ -43,7 +47,7 @@ function EditForm({ me, onClose }: { me: MeProfile; onClose: () => void }) {
     }
   }
 
-  function save() {
+  async function save() {
     const next: Record<string, string> = {};
     if (!looksLikeText(name, 2, 40)) next.name = "2–40 characters, including letters.";
     if (!/^[a-z0-9_]{3,20}$/.test(username)) next.username = "3–20 lowercase letters, numbers or underscores.";
@@ -51,7 +55,8 @@ function EditForm({ me, onClose }: { me: MeProfile; onClose: () => void }) {
     if (availability.length === 0) next.availability = "Pick at least one time you usually ride.";
     setErrors(next);
     if (Object.keys(next).length) return;
-    saveMe({
+    setSaving(true);
+    const error = await saveMe({
       ...me,
       displayName: name.trim(),
       username,
@@ -65,8 +70,25 @@ function EditForm({ me, onClose }: { me: MeProfile; onClose: () => void }) {
       showGender: gender ? showGender : false,
       avatar,
     });
+    setSaving(false);
+    if (error) {
+      setErrors(/username/i.test(error) ? { username: error } : { form: error });
+      return;
+    }
     toast("Profile saved");
     onClose();
+  }
+
+  async function deleteEverything() {
+    setSaving(true);
+    const error = await resetEverything();
+    setSaving(false);
+    if (error) {
+      setConfirmReset(false);
+      setErrors({ form: error });
+      return;
+    }
+    toast("Your data was deleted");
   }
 
   return (
@@ -155,15 +177,16 @@ function EditForm({ me, onClose }: { me: MeProfile; onClose: () => void }) {
         </label>
       </div>
 
+      {errors.form && <ErrorMessage>{errors.form}</ErrorMessage>}
       <div className="flex flex-col-reverse gap-2 border-t border-line pt-4 sm:flex-row sm:items-center sm:justify-between">
         <Button variant="danger" size="sm" onClick={() => setConfirmReset(true)}>
-          <Trash className="h-4 w-4" /> Delete all my data on this device
+          <Trash className="h-4 w-4" /> Delete all my Ride Buddy data
         </Button>
         <div className="flex gap-2">
           <Button variant="ghost" onClick={onClose}>
             Cancel
           </Button>
-          <Button onClick={save}>Save profile</Button>
+          <Button onClick={save} loading={saving}>Save profile</Button>
         </div>
       </div>
 
@@ -179,13 +202,13 @@ function EditForm({ me, onClose }: { me: MeProfile; onClose: () => void }) {
 
       <Dialog open={confirmReset} onClose={() => setConfirmReset(false)} title="Delete everything?">
         <p className="text-sm text-ink-2">
-          This removes your profile, bikes, posts, messages, groups and rides from this device. It can&apos;t be undone.
+          This removes your profile, bikes, posts, messages, groups and rides{cloud ? " from your account" : " from this device"}. It can&apos;t be undone.
         </p>
         <div className="mt-5 flex justify-end gap-2">
           <Button variant="ghost" onClick={() => setConfirmReset(false)}>
             Keep my data
           </Button>
-          <Button variant="dark" onClick={() => resetEverything()}>
+          <Button variant="dark" onClick={deleteEverything} loading={saving}>
             Delete everything
           </Button>
         </div>

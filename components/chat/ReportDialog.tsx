@@ -45,14 +45,14 @@ export function ReportDialog({
     }
     const extra = details.trim().slice(0, 500);
     report({ targetType, targetId, reason: extra ? `${reason}: ${extra}` : reason });
-    toast("Report saved on this device (prototype: no moderation team reviews it)", "info");
+    toast("Report saved. Thanks. (No moderation team reviews reports yet.)", "info");
     close();
   }
 
   return (
     <Dialog open={open} onClose={close} title={targetType === "rider" ? "Report rider" : "Report message"}>
       <p className="text-sm text-ink-2">
-        What&apos;s wrong with {subject}? <span className="text-muted">This is a prototype, so the report stays on this device and no one reviews it.</span>
+        What&apos;s wrong with {subject}? <span className="text-muted">Reports are saved, but no moderation team reviews them yet.</span>
       </p>
       <fieldset className="mt-4">
         <legend className="mb-2 text-sm font-semibold text-ink">Reason</legend>

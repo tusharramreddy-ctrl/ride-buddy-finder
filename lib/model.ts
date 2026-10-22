@@ -91,8 +91,41 @@ export type Ride = {
 
 export type Report = { targetType: "post" | "rider" | "group-message"; targetId: string; reason: string; at: number };
 
+// Another real rider (cloud mode only). Gender appears only if they chose to show it.
+export type PublicProfile = {
+  id: string;
+  displayName: string;
+  username: string;
+  bio: string;
+  region: Area | null;
+  level: Level;
+  style: CharacterId | null;
+  availability: SlotId[];
+  genderShown: Gender | null;
+  avatar: string | null;
+  primaryBike: BikeRef | null;
+};
+
+// "device": the original prototype, everything in this browser.
+// "cloud": Supabase accounts; your own user id is shown as ME inside the app.
+export type AuthState =
+  | { mode: "device" }
+  | {
+      mode: "cloud";
+      status: "loading" | "signed-out" | "signed-in";
+      userId: string | null;
+      email: string | null;
+      // From the sign-in provider (e.g. Google), used only to prefill the profile form.
+      suggestedName?: string | null;
+      suggestedAvatar?: string | null;
+    };
+
 export type AppState = {
   version: 1;
+  auth: AuthState;
+  profiles: Record<string, PublicProfile>; // other real riders, by user id
+  likeCounts: Record<string, number>; // likes from other real riders, by post id
+  groupMembers: Record<string, string[]>; // other real riders in each group
   me: MeProfile | null;
   garage: GarageBike[];
   posts: Post[]; // only posts I wrote; demo posts come from data files
@@ -110,6 +143,10 @@ export type AppState = {
 export function emptyState(): AppState {
   return {
     version: 1,
+    auth: { mode: "device" },
+    profiles: {},
+    likeCounts: {},
+    groupMembers: {},
     me: null,
     garage: [],
     posts: [],
@@ -125,7 +162,15 @@ export function emptyState(): AppState {
   };
 }
 
-export function newId(prefix: string): string {
-  const rand = typeof crypto !== "undefined" && "randomUUID" in crypto ? crypto.randomUUID().slice(0, 8) : Math.random().toString(36).slice(2, 10);
-  return `${prefix}-${Date.now().toString(36)}-${rand}`;
+// Real UUIDs, so the same id works locally and in the database.
+export function newId(): string {
+  if (typeof crypto !== "undefined" && "randomUUID" in crypto) return crypto.randomUUID();
+  // Fallback for very old browsers (still UUID-shaped).
+  return "10000000-1000-4000-8000-100000000000".replace(/[018]/g, (c) =>
+    (Number(c) ^ (Math.random() * 16) >> (Number(c) / 4)).toString(16),
+  );
+}
+
+export function isUuid(id: string): boolean {
+  return /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(id);
 }

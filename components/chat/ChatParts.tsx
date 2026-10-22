@@ -143,12 +143,12 @@ export function ChatPlaceholder() {
   return (
     <div className="flex flex-1 items-center justify-center p-8">
       <div className="max-w-sm text-center">
-        <span aria-hidden className="mx-auto flex h-14 w-14 items-center justify-center rounded-2xl bg-ink text-accent">
+        <span aria-hidden className="mx-auto flex h-14 w-14 items-center justify-center rounded-2xl bg-ink text-on-ink-accent">
           <MessageCircle className="h-7 w-7" />
         </span>
         <h2 className="mt-4 font-display text-2xl font-bold uppercase tracking-wide text-ink">Your messages</h2>
         <p className="mt-2 text-sm text-muted">
-          Pick a conversation or group on the left, or start a new message. Chats are saved on this device only and demo riders
+          Pick a conversation or group on the left, or start a new message. Riders marked Demo are fictional and
           can&apos;t reply.
         </p>
       </div>
@@ -168,7 +168,7 @@ export function ChatNotFound() {
             <SearchX className="h-7 w-7" />
           </span>
           <h2 className="mt-4 font-display text-2xl font-bold uppercase tracking-wide text-ink">We can&apos;t find that chat</h2>
-          <p className="mt-2 text-sm text-muted">The link may be mistyped, or the rider or group doesn&apos;t exist in this prototype.</p>
+          <p className="mt-2 text-sm text-muted">The link may be mistyped, or the rider or group doesn&apos;t exist.</p>
           <Link
             href="/chat"
             className="mt-5 inline-flex h-11 items-center gap-2 rounded-full bg-ink px-5 text-sm font-semibold text-on-ink hover:bg-ink-2"

@@ -2,7 +2,7 @@ import { bikeInfo } from "./bikes";
 import { ME, type AppState } from "./model";
 import { findRider, riderBike } from "./riders";
 
-// One way to show any author: me (from this device) or a demo rider.
+// One way to show any author: me, another real rider (cloud mode), or a demo rider.
 export type Person = {
   id: string;
   name: string;
@@ -26,6 +26,18 @@ export function personFor(id: string, state: AppState): Person {
       bikeLabel: primary ? bikeInfo(primary.bike).label : null,
     };
   }
+  const real = state.profiles[id];
+  if (real) {
+    return {
+      id,
+      name: real.displayName,
+      username: real.username,
+      avatar: real.avatar,
+      href: `/riders/${id}`,
+      demo: false,
+      bikeLabel: real.primaryBike ? bikeInfo(real.primaryBike).label : null,
+    };
+  }
   const rider = findRider(id);
   if (rider) {
     return {
@@ -38,5 +50,10 @@ export function personFor(id: string, state: AppState): Person {
       bikeLabel: riderBike(rider).label,
     };
   }
-  return { id, name: "Unknown rider", username: "unknown", avatar: null, href: "/", demo: true, bikeLabel: null };
+  return { id, name: "Ride Buddy rider", username: "rider", avatar: null, href: `/riders/${id}`, demo: false, bikeLabel: null };
+}
+
+// Is this app running with real accounts (Supabase) right now?
+export function isCloud(state: AppState): boolean {
+  return state.auth.mode === "cloud";
 }

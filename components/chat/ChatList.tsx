@@ -5,11 +5,11 @@ import { useMemo, useState } from "react";
 import { MessageCircle, Search, SquarePen, Users } from "lucide-react";
 import { GROUPS, type Group } from "@/lib/demo";
 import { ME } from "@/lib/model";
-import { findRider } from "@/lib/riders";
+import { isCloud } from "@/lib/people";
 import { useStore } from "@/lib/store";
 import { Avatar, Button, Chip, DemoBadge, EmptyState, IconButton, Tabs, inputClass, timeAgo } from "../ui";
 import { NewMessageDialog } from "./NewMessageDialog";
-import { dmHref, groupHref, groupMemberCount, groupMessages, matches, memberLabel } from "./chat-utils";
+import { dmHref, groupHref, groupMemberCount, groupMessages, matches, memberLabel, partnerFor } from "./chat-utils";
 
 type Tab = "messages" | "groups";
 
@@ -23,14 +23,14 @@ export function ChatList({ selectedId }: { selectedId: string | null }) {
     () =>
       state.conversations
         .filter((c) => !state.blocked.includes(c.riderId))
-        .map((c) => ({ convo: c, rider: findRider(c.riderId) }))
+        .map((c) => ({ convo: c, rider: partnerFor(c.riderId, state) }))
         .filter((x): x is { convo: typeof x.convo; rider: NonNullable<typeof x.rider> } => !!x.rider)
         .sort((a, b) => b.convo.updatedAt - a.convo.updatedAt),
-    [state.conversations, state.blocked],
+    [state],
   );
 
   const shownConvos = conversations.filter(({ convo, rider }) =>
-    matches(query, rider.name, rider.username, convo.messages.at(-1)?.text),
+    matches(query, rider.name, convo.messages.at(-1)?.text),
   );
 
   const groupRows = GROUPS.map((g) => {
@@ -81,7 +81,7 @@ export function ChatList({ selectedId }: { selectedId: string | null }) {
               <EmptyState
                 icon={<MessageCircle className="h-8 w-8" />}
                 title="No conversations yet"
-                body="Start one from a rider's profile or from Find riding buddies. Messages are saved on this device only, and demo riders can't reply."
+                body={isCloud(state) ? "Start one from a rider's profile or from Find riding buddies. Demo riders can't reply; real riders can." : "Start one from a rider's profile or from Find riding buddies. Messages are saved on this device only, and demo riders can't reply."}
                 action={
                   <div className="flex flex-wrap justify-center gap-2">
                     <Button onClick={() => setPicking(true)}>
@@ -112,11 +112,11 @@ export function ChatList({ selectedId }: { selectedId: string | null }) {
                       aria-current={active ? "page" : undefined}
                       className={`flex items-center gap-3 border-b border-line px-4 py-3 transition-colors ${active ? "bg-accent-soft" : "hover:bg-surface-2"}`}
                     >
-                      <Avatar name={rider.name} seed={rider.id} size={44} />
+                      <Avatar name={rider.name} src={rider.avatar} seed={rider.id} size={44} />
                       <span className="min-w-0 flex-1">
                         <span className="flex items-center gap-2">
                           <span className="truncate font-semibold text-ink">{rider.name}</span>
-                          <DemoBadge />
+                          {rider.demo && <DemoBadge />}
                           <span className="ml-auto shrink-0 text-xs text-muted">{timeAgo(convo.updatedAt)}</span>
                         </span>
                         <span className="mt-0.5 block truncate text-sm text-muted">
@@ -140,7 +140,9 @@ export function ChatList({ selectedId }: { selectedId: string | null }) {
       </div>
 
       <p className="border-t border-line px-4 py-2 text-[11px] leading-snug text-muted">
-        Prototype: chats are saved on this device only. Other riders are demo profiles and can&apos;t reply.
+        {isCloud(state)
+          ? "Chats are saved to your account. Riders marked Demo are fictional and can't reply."
+          : "Prototype: chats are saved on this device only. Other riders are demo profiles and can't reply."}
       </p>
 
       <NewMessageDialog open={picking} onClose={() => setPicking(false)} />
@@ -195,7 +197,7 @@ function GroupCard({ group, joined, active }: { group: Group; joined: boolean; a
       className={`block rounded-2xl border p-3.5 transition-colors ${active ? "border-accent bg-accent-soft" : "border-line bg-surface hover:border-line-strong hover:bg-surface-2"}`}
     >
       <span className="flex items-start gap-3">
-        <span aria-hidden className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-ink text-accent">
+        <span aria-hidden className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-ink text-on-ink-accent">
           <Users className="h-5 w-5" />
         </span>
         <span className="min-w-0 flex-1">

@@ -7,6 +7,7 @@ import { bikeInfo, type BikeRef } from "@/lib/bikes";
 import { formatMinutes } from "@/lib/geo";
 import { compressImage } from "@/lib/image";
 import { POST_KINDS, type PostKind, type RideStats } from "@/lib/model";
+import { isCloud } from "@/lib/people";
 import { createPost, editPost, updateRide, useStore } from "@/lib/store";
 import { RoutePreview } from "../RoutePreview";
 import { closeComposer, useComposer, type ComposerPreset } from "../shell/composer-state";
@@ -209,7 +210,9 @@ function ComposerForm({ preset }: { preset: ComposerPreset }) {
       <ErrorMessage>{error}</ErrorMessage>
 
       <div className="flex flex-col-reverse gap-2 border-t border-line pt-4 sm:flex-row sm:items-center sm:justify-between">
-        <p className="text-xs text-muted">Visible in your feed on this device (prototype: not shared with others).</p>
+        <p className="text-xs text-muted">
+          {isCloud(state) ? "Visible to everyone signed in to Ride Buddy." : "Visible in your feed on this device (prototype: not shared with others)."}
+        </p>
         <div className="flex gap-2">
           <Button variant="ghost" onClick={closeComposer}>
             Cancel

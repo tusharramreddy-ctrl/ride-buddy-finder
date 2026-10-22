@@ -3,13 +3,13 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import type { ReactNode } from "react";
-import { House, Map as MapIcon, MessageCircle, Plus, Route, User } from "lucide-react";
-import { useStore } from "@/lib/store";
-import { Logo } from "../Brand";
+import { House, LogOut, Map as MapIcon, MessageCircle, Plus, Route, User } from "lucide-react";
+import { signOut, useStore } from "@/lib/store";
+import { BrandMark, Logo } from "../Brand";
 import { ThemeButton, ThemeToggle } from "../ThemeToggle";
-import { Avatar, Button, ErrorMessage, Toaster } from "../ui";
+import { Avatar, Button, ErrorMessage, Spinner, Toaster } from "../ui";
 import { ComposerDialog } from "../home/Composer";
-import { Welcome } from "./Welcome";
+import { SignIn, Welcome } from "./Welcome";
 import { openComposer } from "./composer-state";
 
 const NAV = [
@@ -23,8 +23,18 @@ export function Shell({ children }: { children: ReactNode }) {
   const { state, saveError } = useStore();
   const pathname = usePathname();
 
+  if (state.auth.mode === "cloud" && state.auth.status === "loading") {
+    return (
+      <div className="flex min-h-dvh flex-col items-center justify-center gap-3" aria-label="Loading Ride Buddy">
+        <BrandMark size={48} className="animate-pulse" />
+        <Spinner label="Loading your riding world…" />
+      </div>
+    );
+  }
+  if (state.auth.mode === "cloud" && state.auth.status === "signed-out") return <SignIn />;
   if (!state.me) return <Welcome />;
   const me = state.me;
+  const cloud = state.auth.mode === "cloud";
   const onMap = pathname.startsWith("/map");
 
   return (
@@ -64,10 +74,17 @@ export function Shell({ children }: { children: ReactNode }) {
         </div>
         <div className="mt-auto space-y-3">
           <ThemeToggle />
-          <p className="rounded-xl bg-surface-2 px-3 py-2.5 text-xs leading-relaxed text-muted">
-            <strong className="text-ink-2">Prototype.</strong> Your profile, posts, chats and rides are saved on this device
-            only. Other riders are fictional demo profiles.
-          </p>
+          {cloud ? (
+            <p className="rounded-xl bg-surface-2 px-3 py-2.5 text-xs leading-relaxed text-muted">
+              Riders marked <strong className="text-ink-2">Demo</strong> are fictional examples. Riders aren&apos;t verified,
+              so meet in public.
+            </p>
+          ) : (
+            <p className="rounded-xl bg-surface-2 px-3 py-2.5 text-xs leading-relaxed text-muted">
+              <strong className="text-ink-2">Prototype.</strong> Your profile, posts, chats and rides are saved on this device
+              only. Other riders are fictional demo profiles.
+            </p>
+          )}
           <Link href="/profile" className="flex items-center gap-3 rounded-xl px-2 py-2 hover:bg-surface-2">
             <Avatar name={me.displayName} src={me.avatar} seed="me" size={36} />
             <span className="min-w-0">
@@ -75,6 +92,15 @@ export function Shell({ children }: { children: ReactNode }) {
               <span className="block truncate text-xs text-muted">@{me.username}</span>
             </span>
           </Link>
+          {cloud && (
+            <button
+              type="button"
+              onClick={() => void signOut()}
+              className="flex w-full items-center gap-2 rounded-xl px-3 py-2 text-sm font-semibold text-ink-2 hover:bg-surface-2 hover:text-ink"
+            >
+              <LogOut aria-hidden className="h-4 w-4" /> Sign out
+            </button>
+          )}
         </div>
       </aside>
 

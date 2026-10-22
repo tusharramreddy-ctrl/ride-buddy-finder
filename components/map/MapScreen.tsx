@@ -71,7 +71,7 @@ export function MapScreen() {
     const id = saveRide(toRide(tracker, meta));
     rt.reset();
     setSavedId(id);
-    toast("Ride saved on this device");
+    toast("Ride saved");
   };
 
   const share = (ride: Ride) => shareRideToFeed(ride);
@@ -177,7 +177,7 @@ export function MapScreen() {
           if (tracker && rt.phase === "ended") rt.reset();
           setSelectedId(null);
           setSavedId(id);
-          toast("Ride saved on this device");
+          toast("Ride saved");
         }}
       />
 
@@ -203,7 +203,7 @@ export function MapScreen() {
         }}
         onClose={() => setConfirm(null)}
       >
-        The recorded route and stats will be deleted from this device. This can&apos;t be undone.
+        The recorded route and stats will be deleted. This can&apos;t be undone.
       </ConfirmDialog>
 
       <ConfirmDialog
@@ -222,7 +222,7 @@ export function MapScreen() {
       >
         {confirm?.kind === "delete" && (
           <>
-            &ldquo;{confirm.ride.title}&rdquo; will be removed from this device.
+            &ldquo;{confirm.ride.title}&rdquo; will be removed from your rides.
             {confirm.ride.sharedPostId && " The post you shared stays in the feed; you can delete it there."}
           </>
         )}

@@ -7,6 +7,14 @@
 - **Map:** start a ride with GPS (only after you allow location), pause, resume and end it, see a summary, then save it and optionally share it to the feed. You can also add a ride manually.
 - **Profile:** your rider identity, a garage of bikes chosen from a searchable catalogue that includes BMW Motorrad, ride history, and stats calculated from your saved rides.
 
+## Two modes
+
+- **With Supabase** (when `NEXT_PUBLIC_SUPABASE_URL` and `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY` are set): real sign-in
+  with Google or an email link, a shared feed, real messages and groups with live updates, and photos and rides stored
+  in the database. Setup guide: [`supabase/SETUP.md`](supabase/SETUP.md). Schema and security rules:
+  [`supabase/setup.sql`](supabase/setup.sql).
+- **Without Supabase**: the device-only prototype described below.
+
 ## Prototype: what is real and what isn't
 
 | Part | How it works now |

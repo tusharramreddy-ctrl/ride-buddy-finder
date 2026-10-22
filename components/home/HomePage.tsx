@@ -1,12 +1,14 @@
 "use client";
 
 import Link from "next/link";
+import { useEffect } from "react";
 import { ArrowRight, Bike, CalendarDays, CircleHelp, Route, Sparkles, Users } from "lucide-react";
+import { bikeInfo } from "@/lib/bikes";
 import { areNearby, CHARACTERS } from "@/lib/constants";
 import { DEMO_POSTS, GROUPS } from "@/lib/demo";
 import { personFor } from "@/lib/people";
 import { RIDERS, riderBike } from "@/lib/riders";
-import { useStore } from "@/lib/store";
+import { loadDirectory, useStore } from "@/lib/store";
 import { openComposer } from "../shell/composer-state";
 import { Avatar, Button, Card, DemoBadge, EmptyState, SectionTitle } from "../ui";
 import { PostCard } from "./PostCard";
@@ -121,6 +123,15 @@ function SideColumn() {
   const { state } = useStore();
   const me = state.me!;
 
+  useEffect(() => {
+    loadDirectory();
+  }, []);
+
+  // Newest real riders (cloud mode), not blocked.
+  const realRiders = Object.values(state.profiles)
+    .filter((p) => !state.blocked.includes(p.id))
+    .slice(0, 4);
+
   // Simple, explainable suggestions: shared free time first, then nearby area.
   const suggested = RIDERS.filter((r) => !state.blocked.includes(r.id))
     .map((r) => ({
@@ -139,6 +150,27 @@ function SideColumn() {
 
   return (
     <aside className="hidden w-80 shrink-0 space-y-6 xl:block">
+      {realRiders.length > 0 && (
+        <Card className="p-4">
+          <SectionTitle>New riders</SectionTitle>
+          <ul className="space-y-3">
+            {realRiders.map((p) => (
+              <li key={p.id}>
+                <Link href={`/riders/${p.id}`} className="flex items-center gap-3 rounded-xl p-1 hover:bg-surface-2">
+                  <Avatar name={p.displayName} src={p.avatar} seed={p.id} size={40} />
+                  <span className="min-w-0">
+                    <span className="block truncate text-sm font-semibold">{p.displayName}</span>
+                    <span className="block truncate text-xs text-muted">
+                      {[p.level, p.region, p.primaryBike ? bikeInfo(p.primaryBike).label : null].filter(Boolean).join(" · ")}
+                    </span>
+                  </span>
+                </Link>
+              </li>
+            ))}
+          </ul>
+        </Card>
+      )}
+
       <Card className="p-4">
         <SectionTitle action={<DemoBadge />}>Riders to know</SectionTitle>
         <ul className="space-y-3">

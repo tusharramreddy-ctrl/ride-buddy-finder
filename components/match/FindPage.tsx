@@ -446,7 +446,7 @@ function Results({
               </Button>
             </div>
             <p className="mt-3 text-xs text-muted">
-              &ldquo;Open in Chat&rdquo; puts the intro in a message box for you to send. It&apos;s a demo rider, so it stays on this device.
+              &ldquo;Open in Chat&rdquo; puts the intro in a message box for you to send. It&apos;s a demo rider, so they can&apos;t reply.
             </p>
           </Card>
         </div>

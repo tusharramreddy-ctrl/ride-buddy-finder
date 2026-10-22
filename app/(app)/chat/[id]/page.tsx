@@ -7,7 +7,7 @@ import { DirectChat } from "@/components/chat/DirectChat";
 import { GroupChat } from "@/components/chat/GroupChat";
 import { parseChatId } from "@/components/chat/chat-utils";
 
-// /chat/dm-<riderId>  direct conversation with a demo rider
+// /chat/dm-<riderId>  direct conversation with a demo rider or a real rider
 // /chat/g-<groupId>   group chat
 // Optional ?draft=<text> pre-fills the message box (never sent automatically).
 export default function ChatThreadPage({
@@ -26,7 +26,7 @@ export default function ChatThreadPage({
   return (
     <ChatFrame selectedId={target.kind === "invalid" ? "invalid" : target.id}>
       {target.kind === "dm" ? (
-        <DirectChat key={target.id} rider={target.rider} draft={draft} />
+        <DirectChat key={target.id} partnerId={target.partnerId} draft={draft} />
       ) : target.kind === "group" ? (
         <GroupChat key={target.id} group={target.group} draft={draft} />
       ) : (

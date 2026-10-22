@@ -59,7 +59,7 @@ export function RideHistory({
             <Route aria-hidden className="mb-3 h-8 w-8 text-on-asphalt-muted" />
             <p className="font-semibold">No rides yet</p>
             <p className="mt-1 max-w-xs text-sm text-on-asphalt-muted">
-              Track a ride with GPS, or add one you&apos;ve already done. Rides are saved on this device only.
+              Track a ride with GPS, or add one you&apos;ve already done. Rides are private to you.
             </p>
             <button
               type="button"

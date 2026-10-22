@@ -7,7 +7,7 @@ import { bikeInfo } from "@/lib/bikes";
 import { DEMO_COMMENTS } from "@/lib/demo";
 import { formatMinutes } from "@/lib/geo";
 import { ME, POST_KINDS, type Comment, type Post } from "@/lib/model";
-import { personFor } from "@/lib/people";
+import { isCloud, personFor } from "@/lib/people";
 import { addComment, deleteComment, deletePost, hidePost, report, toggleLike, useStore } from "@/lib/store";
 import { RoutePreview } from "../RoutePreview";
 import { openComposer } from "../shell/composer-state";
@@ -20,7 +20,7 @@ export function PostCard({ post }: { post: Post }) {
   const author = personFor(post.authorId, state);
   const mine = post.authorId === ME;
   const liked = state.likes.includes(post.id);
-  const likeCount = post.baseLikes + (liked ? 1 : 0);
+  const likeCount = post.baseLikes + (state.likeCounts[post.id] ?? 0) + (liked ? 1 : 0);
   const comments = [...DEMO_COMMENTS.filter((c) => c.postId === post.id), ...state.comments.filter((c) => c.postId === post.id)]
     .filter((c) => !state.blocked.includes(c.authorId))
     .sort((a, b) => a.createdAt - b.createdAt);
@@ -172,7 +172,7 @@ export function PostCard({ post }: { post: Post }) {
       </article>
 
       <Dialog open={confirmDelete} onClose={() => setConfirmDelete(false)} title="Delete post?">
-        <p className="text-sm text-ink-2">This removes the post and its comments from this device. It can&apos;t be undone.</p>
+        <p className="text-sm text-ink-2">This removes the post and its comments{isCloud(state) ? "" : " from this device"}. It can&apos;t be undone.</p>
         <div className="mt-5 flex justify-end gap-2">
           <Button variant="ghost" onClick={() => setConfirmDelete(false)}>
             Cancel
@@ -197,7 +197,7 @@ export function PostCard({ post }: { post: Post }) {
           report({ targetType: "post", targetId: post.id, reason });
           hidePost(post.id);
           setReporting(false);
-          toast("Report saved on this device and post hidden (prototype: no moderation team)");
+          toast("Report saved and post hidden. No moderation team reviews reports yet.");
         }}
       />
     </Card>
@@ -307,7 +307,7 @@ export function ReportDialog({ open, onClose, onSubmit }: { open: boolean; onClo
           </label>
         ))}
       </fieldset>
-      <p className="mt-4 text-xs text-muted">Prototype: reports are saved on this device only. No moderation team reviews them yet.</p>
+      <p className="mt-4 text-xs text-muted">Reports are saved, but no moderation team reviews them yet.</p>
       <div className="mt-4 flex justify-end gap-2">
         <Button variant="ghost" onClick={onClose}>
           Cancel

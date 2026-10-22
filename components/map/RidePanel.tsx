@@ -454,7 +454,7 @@ function SummaryView(p: PanelProps & { tracker: TrackerState }) {
           <Trash aria-hidden className="h-4 w-4" /> Discard ride
         </button>
       </div>
-      <p className="text-xs text-on-asphalt-muted">Saved on this device only. Nothing is shared unless you choose to.</p>
+      <p className="text-xs text-on-asphalt-muted">Private to you. Nothing is shared unless you choose to.</p>
     </form>
   );
 }
@@ -465,7 +465,7 @@ function SavedView({ ride, onShare, onDone }: { ride: Ride; onShare: (r: Ride) =
     <>
       <div>
         <h1 className="font-display text-2xl font-bold uppercase tracking-wide text-white">Ride saved</h1>
-        <p className="text-sm text-on-asphalt-muted">&ldquo;{ride.title}&rdquo; is in Your rides on this device.</p>
+        <p className="text-sm text-on-asphalt-muted">&ldquo;{ride.title}&rdquo; is in Your rides.</p>
       </div>
       <dl className="grid grid-cols-3 gap-3">
         <Stat label="Distance" value={kmValue(ride.distanceM)} unit="km" />
