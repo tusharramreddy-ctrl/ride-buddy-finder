@@ -36,6 +36,9 @@ async function askForJson<T>(opts: {
   attempts: number;
   // How much the model "thinks" before answering. Less is faster.
   effort: "minimal" | "low";
+  // Upper limit on the reply. Without one, OpenRouter reserves the model's
+  // maximum against the key's credit and refuses the call when credit runs low.
+  maxTokens: number;
   fast?: boolean;
 }): Promise<T> {
   const apiKey = process.env.OPENROUTER_API_KEY?.trim();
@@ -56,6 +59,7 @@ async function askForJson<T>(opts: {
       json_schema: { name: "answer", strict: true, schema: opts.jsonSchema },
     },
     reasoning: { effort: opts.effort, exclude: true },
+    max_tokens: opts.maxTokens,
     // Only use providers that can guarantee the JSON format.
     provider: { require_parameters: true },
   });
@@ -148,6 +152,7 @@ export async function checkBike(brand: string, model: string): Promise<boolean> 
     totalMs: 8000,
     attempts: 1,
     effort: "minimal",
+    maxTokens: 300,
     fast: true,
   });
   return result.isRealMotorcycle;
@@ -184,6 +189,7 @@ export async function rankMatches(profile: MatchPrefs, candidates: DemoRider[]):
     totalMs: 20000,
     attempts: 2,
     effort: "low",
+    maxTokens: 2000,
   });
   return result.matches;
 }
@@ -210,6 +216,7 @@ export async function draftIntro(profile: MatchPrefs, rider: DemoRider): Promise
     totalMs: 9000,
     attempts: 2,
     effort: "minimal",
+    maxTokens: 1000,
     fast: true,
   });
   return result.message.trim();
@@ -273,6 +280,7 @@ export async function planRide(a: PlanRider, b: PlanRider, basics: PlanBasics): 
     totalMs: 15000,
     attempts: 2,
     effort: "minimal",
+    maxTokens: 1200,
     fast: true,
   });
 }
@@ -324,6 +332,7 @@ export async function interpretDescription(text: string): Promise<Interpretation
     totalMs: 12000,
     attempts: 2,
     effort: "minimal",
+    maxTokens: 800,
     fast: true,
   });
 }
