@@ -197,7 +197,10 @@ export async function draftIntro(profile: Profile, rider: DemoRider): Promise<st
       "You write a short, warm first message from one motorcycle rider to another who might ride together. " +
       "60–110 words, friendly and natural, no emojis overload (one at most), no made-up facts. " +
       "Mention one or two things from the inCommonWithRider list (only those) and suggest an easy first ride " +
-      "at a time they are both free. Rephrase the facts naturally, in first person (\"we both…\"). " +
+      "during a free time they share, described only in general terms like \"a weekend morning\". " +
+      "Do NOT name any place, destination, route, landmark, café or meeting point, and do NOT give a " +
+      "specific day, date or clock time. Leave those for the riders to agree on themselves. " +
+      "Rephrase the facts naturally, in first person (\"we both…\"). " +
       "Put the sign-off (the sender's name) on its own line. " +
       DATA_NOTE,
     prompt: JSON.stringify({ from: describeProfile(profile), to: describeRider(rider, profile) }),
