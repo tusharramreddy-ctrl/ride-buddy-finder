@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { useState, type ReactNode } from "react";
 import { Mail, MessageCircle, Route, Users } from "lucide-react";
 import { AREAS, GENDERS, LEVELS, SLOTS, type Area, type Gender, type Level, type SlotId } from "@/lib/constants";
@@ -140,7 +141,15 @@ export function SignIn() {
         <p className="text-xs leading-relaxed text-muted">
           We use your email only to sign you in. Your profile, posts and messages are stored in Ride Buddy&apos;s database.
           Riders marked <strong>Demo</strong> are fictional examples. Ride Buddy doesn&apos;t verify riders, so always meet
-          in public and ride within your limits.
+          in public and ride within your limits. By signing in you agree to the{" "}
+          <Link href="/terms" className="font-semibold underline">
+            Terms
+          </Link>{" "}
+          and{" "}
+          <Link href="/privacy" className="font-semibold underline">
+            Privacy policy
+          </Link>
+          .
         </p>
       </div>
     </AuthLayout>

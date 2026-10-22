@@ -92,6 +92,14 @@ export function Shell({ children }: { children: ReactNode }) {
               <span className="block truncate text-xs text-muted">@{me.username}</span>
             </span>
           </Link>
+          <p className="flex gap-3 px-3 text-xs text-muted">
+            <Link href="/privacy" className="hover:text-ink hover:underline">
+              Privacy
+            </Link>
+            <Link href="/terms" className="hover:text-ink hover:underline">
+              Terms
+            </Link>
+          </p>
           {cloud && (
             <button
               type="button"

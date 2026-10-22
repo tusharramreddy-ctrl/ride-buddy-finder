@@ -171,6 +171,15 @@ export function ProfilePage() {
         </div>
       </div>
 
+      <p className="mt-10 flex justify-center gap-4 text-xs text-muted lg:hidden">
+        <Link href="/privacy" className="hover:text-ink hover:underline">
+          Privacy policy
+        </Link>
+        <Link href="/terms" className="hover:text-ink hover:underline">
+          Terms
+        </Link>
+      </p>
+
       <EditProfileDialog open={editOpen} onClose={() => setEditOpen(false)} me={me} />
     </div>
   );
