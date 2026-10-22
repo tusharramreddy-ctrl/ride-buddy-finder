@@ -1,5 +1,5 @@
 import { codeReason, rankByCode } from "./filters";
-import type { Profile } from "./profile";
+import type { MatchPrefs } from "./prefs";
 import type { DemoRider } from "./riders";
 
 export type AiPick = { riderId: string; reason: string };
@@ -11,7 +11,7 @@ export const MATCH_COUNT = 3;
 // - only riders on the filtered shortlist are allowed (no made-up or filtered-out riders)
 // - no duplicates, sensible reason length
 // - any gaps are filled from the plain-code ranking with a plain-code reason
-export function buildMatches(profile: Profile, candidates: DemoRider[], aiPicks: AiPick[] | null): Match[] {
+export function buildMatches(profile: MatchPrefs, candidates: DemoRider[], aiPicks: AiPick[] | null): Match[] {
   const byId = new Map(candidates.map((r) => [r.id, r]));
   const matches: Match[] = [];
   const used = new Set<string>();

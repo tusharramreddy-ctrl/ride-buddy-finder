@@ -42,3 +42,6 @@ next-env.d.ts
 
 # keep the example env file (it has no secrets)
 !.env.example
+
+# copied from node_modules before dev/build (scripts/copy-map-worker.mjs)
+/public/maplibre-gl-worker.mjs

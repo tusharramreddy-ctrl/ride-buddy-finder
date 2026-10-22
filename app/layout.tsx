@@ -1,28 +1,30 @@
 import type { Metadata, Viewport } from "next";
-import { Geist } from "next/font/google";
+import { Barlow_Condensed, Inter } from "next/font/google";
 import "./globals.css";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
+const body = Inter({ variable: "--font-body", subsets: ["latin"] });
+const display = Barlow_Condensed({
+  variable: "--font-display-face",
   subsets: ["latin"],
+  weight: ["600", "700", "800"],
+  style: ["normal", "italic"],
 });
 
 export const metadata: Metadata = {
-  title: "Ride Buddy Finder",
-  description: "Find compatible motorcycle riding partners around Bengaluru. Demo with fictional riders.",
+  title: "Ride Buddy",
+  description: "Find your people. Ride your road. A community prototype for motorcycle riders in Bengaluru.",
 };
 
 export const viewport: Viewport = {
-  themeColor: [
-    { media: "(prefers-color-scheme: light)", color: "#faf7f2" },
-    { media: "(prefers-color-scheme: dark)", color: "#16130f" },
-  ],
+  themeColor: "#f6f3ee",
+  width: "device-width",
+  initialScale: 1,
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
-    <html lang="en" className={`${geistSans.variable} h-full antialiased`}>
-      <body className="min-h-full flex flex-col">{children}</body>
+    <html lang="en" className={`${body.variable} ${display.variable} h-full antialiased`}>
+      <body className="min-h-full">{children}</body>
     </html>
   );
 }

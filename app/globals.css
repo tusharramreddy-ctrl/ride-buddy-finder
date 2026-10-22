@@ -1,58 +1,95 @@
 @import "tailwindcss";
 
+/* Ride Buddy design tokens.
+   Road & asphalt neutrals, one high-energy "road-line amber" accent.
+   Dark "asphalt" surfaces are used only for the map and ride tracking. */
 :root {
-  --background: #faf7f2;
+  --bg: #f6f3ee;
   --surface: #ffffff;
-  --surface-muted: #f3eee6;
-  --foreground: #1f1a14;
-  --muted: #6b6257;
-  --border: #e4ddd2;
-  --accent: #d9480f;
-  --accent-hover: #b93c0b;
-  --accent-soft: #fde8dc;
-  --on-accent: #ffffff;
+  --surface-2: #f0ebe3;
+  --surface-3: #e7e1d7;
+  --ink: #1b1a18;
+  --ink-2: #4d4943;
+  --muted: #736d64;
+  --line: #e2dcd2;
+  --line-strong: #cfc7ba;
+
+  --accent: #f5a400;
+  --accent-hover: #e09600;
+  --accent-soft: #fdf0d2;
+  --accent-ink: #855400; /* accent-coloured text that passes contrast on light backgrounds */
+  --on-accent: #1b1a18;
+
+  --asphalt: #16181b;
+  --asphalt-2: #22262b;
+  --asphalt-line: #343a41;
+  --on-asphalt: #f3f1ec;
+  --on-asphalt-muted: #a9b0b8;
+
   --danger: #b42318;
   --danger-soft: #fdecea;
-  --success: #1e7a46;
-}
+  --success: #17703f;
+  --success-soft: #e3f4ea;
+  --info-soft: #e8eef6;
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #16130f;
-    --surface: #211d18;
-    --surface-muted: #2b2620;
-    --foreground: #f3ede4;
-    --muted: #b0a596;
-    --border: #3a332b;
-    --accent: #ff7a3d;
-    --accent-hover: #ff935f;
-    --accent-soft: #3d2416;
-    --on-accent: #1a0f08;
-    --danger: #ff8a80;
-    --danger-soft: #3b1c1a;
-    --success: #6fd39a;
-  }
+  --shadow-sm: 0 1px 2px rgb(27 26 24 / 0.06);
+  --shadow-md: 0 6px 24px rgb(27 26 24 / 0.08);
 }
 
 @theme inline {
-  --color-background: var(--background);
+  --color-bg: var(--bg);
   --color-surface: var(--surface);
-  --color-surface-muted: var(--surface-muted);
-  --color-foreground: var(--foreground);
+  --color-surface-2: var(--surface-2);
+  --color-surface-3: var(--surface-3);
+  --color-ink: var(--ink);
+  --color-ink-2: var(--ink-2);
   --color-muted: var(--muted);
-  --color-border: var(--border);
+  --color-line: var(--line);
+  --color-line-strong: var(--line-strong);
   --color-accent: var(--accent);
   --color-accent-hover: var(--accent-hover);
   --color-accent-soft: var(--accent-soft);
+  --color-accent-ink: var(--accent-ink);
   --color-on-accent: var(--on-accent);
+  --color-asphalt: var(--asphalt);
+  --color-asphalt-2: var(--asphalt-2);
+  --color-asphalt-line: var(--asphalt-line);
+  --color-on-asphalt: var(--on-asphalt);
+  --color-on-asphalt-muted: var(--on-asphalt-muted);
   --color-danger: var(--danger);
   --color-danger-soft: var(--danger-soft);
   --color-success: var(--success);
-  --font-sans: var(--font-geist-sans), system-ui, sans-serif;
+  --color-success-soft: var(--success-soft);
+  --color-info-soft: var(--info-soft);
+  --shadow-sm: var(--shadow-sm);
+  --shadow-md: var(--shadow-md);
+  --font-sans: var(--font-body), system-ui, sans-serif;
+  --font-display: var(--font-display-face), var(--font-body), system-ui, sans-serif;
+}
+
+html {
+  color-scheme: light;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
+  background: var(--bg);
+  color: var(--ink);
   font-family: var(--font-sans);
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* Display type: condensed, bold, a little motorsport. */
+.font-display {
+  font-family: var(--font-display);
+  letter-spacing: 0.01em;
+}
+
+:focus-visible {
+  outline: 2px solid var(--accent-ink);
+  outline-offset: 2px;
+}
+
+/* MapLibre: keep attribution readable on the dark map surface. */
+.maplibregl-ctrl-attrib {
+  font-size: 11px;
 }

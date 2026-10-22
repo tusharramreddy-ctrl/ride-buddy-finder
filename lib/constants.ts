@@ -4,6 +4,16 @@
 export const LEVELS = ["Beginner", "Intermediate", "Advanced"] as const;
 export type Level = (typeof LEVELS)[number];
 
+// Self-described and always optional. Only shown on a profile if the rider
+// chooses, and only used by plain code for the "women riders only" filter.
+export const GENDERS = [
+  { id: "woman", label: "Woman" },
+  { id: "man", label: "Man" },
+  { id: "non-binary", label: "Non-binary" },
+] as const;
+export type Gender = (typeof GENDERS)[number]["id"];
+export const GENDER_IDS = GENDERS.map((g) => g.id) as [Gender, ...Gender[]];
+
 export const BIKE_TYPES = [
   "Cruiser",
   "Sport",
@@ -70,28 +80,29 @@ export function areNearby(a: Area, b: Area): boolean {
   );
 }
 
+// Riding styles ("characters"). Pace drives the matching score.
 export const CHARACTERS = {
   cruiser: {
     name: "The Cruiser",
-    emoji: "🌄",
+    short: "Scenic cruising",
     pace: "relaxed",
     blurb: "Relaxed pace, scenic roads and no rush. The ride itself is the point.",
   },
   explorer: {
     name: "The Explorer",
-    emoji: "🧭",
+    short: "Touring & adventure",
     pace: "moderate",
     blurb: "Long tours, new places and the odd dirt trail. Always planning the next trip.",
   },
   carver: {
     name: "The Carver",
-    emoji: "🏁",
+    short: "Twisties & spirited",
     pace: "spirited",
     blurb: "Twisty roads and a spirited pace. You love getting the lines right.",
   },
   social: {
     name: "The Social Rider",
-    emoji: "☕",
+    short: "Group & breakfast rides",
     pace: "relaxed",
     blurb: "Group rides, breakfast runs and chai stops. Riding is better together.",
   },

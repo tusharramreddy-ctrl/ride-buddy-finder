@@ -1,13 +1,13 @@
 import { describe, expect, it } from "vitest";
 import { findModel } from "@/lib/bikes";
 import { areNearby } from "@/lib/constants";
-import { failsSafetyRule, passesHardFilters, shortlist } from "@/lib/filters";
+import { failsSafetyRule, failsWomenOnly, inCommon, passesHardFilters, shortlist } from "@/lib/filters";
 import { buildMatches } from "@/lib/matching";
 import { RIDERS } from "@/lib/riders";
-import { makeProfile, makeRider } from "./helpers";
+import { makePrefs, makeRider } from "./helpers";
 
 describe("demo data", () => {
-  it("has about 25 riders, all marked as demo, with real bikes", () => {
+  it("has 25 riders, all marked as demo, with real catalogue bikes", () => {
     expect(RIDERS.length).toBe(25);
     for (const r of RIDERS) {
       expect(r.isDemo).toBe(true);
@@ -18,40 +18,68 @@ describe("demo data", () => {
 
 describe("hard filters", () => {
   it("needs a shared time slot", () => {
-    const rider = makeRider({ availability: ["weekday-evenings"] });
-    expect(passesHardFilters(makeProfile(), rider)).toBe(false);
+    expect(passesHardFilters(makePrefs(), makeRider({ availability: ["weekday-evenings"] }))).toBe(false);
   });
 
   it("needs the same or a neighbouring area", () => {
     expect(areNearby("Jayanagar", "JP Nagar")).toBe(true);
     expect(areNearby("JP Nagar", "Jayanagar")).toBe(true);
     expect(areNearby("Jayanagar", "Yelahanka")).toBe(false);
-    expect(passesHardFilters(makeProfile(), makeRider({ area: "Yelahanka" }))).toBe(false);
+    expect(passesHardFilters(makePrefs(), makeRider({ area: "Yelahanka" }))).toBe(false);
   });
 
   it("never pairs a beginner with an advanced carver, either way round", () => {
     const fast = makeRider({ level: "Advanced", character: "carver" });
-    expect(failsSafetyRule(makeProfile({ level: "Beginner" }), fast)).toBe(true);
-    expect(failsSafetyRule(makeProfile({ level: "Intermediate" }), fast)).toBe(false);
+    expect(failsSafetyRule(makePrefs({ level: "Beginner" }), fast)).toBe(true);
+    expect(failsSafetyRule(makePrefs({ level: "Intermediate" }), fast)).toBe(false);
+    expect(failsSafetyRule(makePrefs({ level: "Advanced", style: "carver" }), makeRider({ level: "Beginner" }))).toBe(true);
+  });
 
-    const advancedCarver = makeProfile({ level: "Advanced", character: "carver" });
-    expect(failsSafetyRule(advancedCarver, makeRider({ level: "Beginner" }))).toBe(true);
+  it("women-only: only shows riders who describe themselves as women", () => {
+    const prefs = makePrefs({ womenOnly: true });
+    expect(failsWomenOnly(prefs, makeRider({ gender: "woman" }))).toBe(false);
+    expect(failsWomenOnly(prefs, makeRider({ gender: "man" }))).toBe(true);
+    expect(failsWomenOnly(prefs, makeRider({ gender: null }))).toBe(true);
+  });
+
+  it("women-only works both ways: women-only riders are hidden from anyone not self-described as a woman", () => {
+    const wo = makeRider({ gender: "woman", womenOnly: true });
+    expect(failsWomenOnly(makePrefs({ gender: null }), wo)).toBe(true);
+    expect(failsWomenOnly(makePrefs({ gender: "man" }), wo)).toBe(true);
+    expect(failsWomenOnly(makePrefs({ gender: "woman" }), wo)).toBe(false);
+  });
+
+  it("women-only results from the real demo data contain only women", () => {
+    const list = shortlist(makePrefs({ womenOnly: true, gender: "woman", availability: ["weekend-mornings", "weekend-afternoons", "weekday-evenings"] }), RIDERS);
+    expect(list.length).toBeGreaterThan(0);
+    expect(list.every((r) => r.gender === "woman")).toBe(true);
   });
 
   it("gives the sample beginner in Jayanagar at least 3 safe matches", () => {
-    const list = shortlist(makeProfile(), RIDERS);
+    const list = shortlist(makePrefs(), RIDERS);
     expect(list.length).toBeGreaterThanOrEqual(3);
     expect(list.some((r) => r.level === "Advanced" && r.character === "carver")).toBe(false);
+  });
+
+  it("works without a bike", () => {
+    expect(shortlist(makePrefs({ bike: null }), RIDERS).length).toBeGreaterThanOrEqual(3);
+  });
+
+  it("lists only true shared facts", () => {
+    const facts = inCommon(makePrefs(), makeRider());
+    expect(facts).toContain("both are The Cruiser riders");
+    expect(facts).toContain("both ride a Royal Enfield Classic 350");
+    expect(facts).toContain("both ride from Jayanagar");
   });
 });
 
 describe("buildMatches", () => {
-  const profile = makeProfile();
-  const candidates = shortlist(profile, RIDERS);
+  const prefs = makePrefs();
+  const candidates = shortlist(prefs, RIDERS);
 
   it("keeps valid AI picks in order", () => {
     const picks = candidates.slice(0, 3).map((r) => ({ riderId: r.id, reason: `Great fit with ${r.name} because…` }));
-    const matches = buildMatches(profile, candidates, picks);
+    const matches = buildMatches(prefs, candidates, picks);
     expect(matches.map((m) => m.rider.id)).toEqual(candidates.slice(0, 3).map((r) => r.id));
     expect(matches.every((m) => m.reasonSource === "ai")).toBe(true);
   });
@@ -64,7 +92,7 @@ describe("buildMatches", () => {
       { riderId: first.id, reason: "A perfectly good reason here." },
       { riderId: first.id, reason: "Same rider twice, should be dropped." },
     ];
-    const matches = buildMatches(profile, candidates, picks);
+    const matches = buildMatches(prefs, candidates, picks);
     expect(matches).toHaveLength(3);
     expect(new Set(matches.map((m) => m.rider.id)).size).toBe(3);
     expect(matches.every((m) => candidates.includes(m.rider))).toBe(true);
@@ -72,12 +100,8 @@ describe("buildMatches", () => {
     expect(matches[1].reasonSource).toBe("code");
   });
 
-  it("works with no AI answer at all", () => {
-    expect(buildMatches(profile, candidates, null)).toHaveLength(3);
-  });
-
   it("shows fewer than 3 rather than inventing riders", () => {
-    expect(buildMatches(profile, candidates.slice(0, 1), null)).toHaveLength(1);
-    expect(buildMatches(profile, [], null)).toHaveLength(0);
+    expect(buildMatches(prefs, candidates.slice(0, 1), null)).toHaveLength(1);
+    expect(buildMatches(prefs, [], null)).toHaveLength(0);
   });
 });

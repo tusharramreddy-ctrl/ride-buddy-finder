@@ -1,0 +1,72 @@
+[
+  {
+    "id": "weekend-scenic", "name": "Weekend Scenic Riders",
+    "description": "Easy-paced Saturday and Sunday morning rides to lakes, hills and breakfast spots. Nobody gets left behind.",
+    "interests": ["Scenic roads", "Relaxed pace", "Breakfast runs"], "region": "All of Bengaluru",
+    "members": ["r01", "r03", "r11", "r18", "r22", "r19"],
+    "messages": [
+      { "from": "r18", "text": "Anyone up for an easy loop this weekend? Thinking 80–100 km, back by lunch.", "hoursAgo": 20 },
+      { "from": "r01", "text": "I'm in. Prefer starting early before it gets hot.", "hoursAgo": 19 },
+      { "from": "r22", "text": "Count me in too. Let's keep it relaxed with a coffee stop halfway.", "hoursAgo": 17 }
+    ]
+  },
+  {
+    "id": "beginner-friendly", "name": "Beginner-Friendly Rides",
+    "description": "For riders in their first couple of years. Short distances, frequent stops and patient riders who are happy to share tips.",
+    "interests": ["Learning", "Short rides", "Riding tips"], "region": "South Bengaluru",
+    "members": ["r02", "r04", "r13", "r17", "r20", "r22"],
+    "messages": [
+      { "from": "r02", "text": "Still nervous on highways. Any tips for my first longer ride?", "hoursAgo": 30 },
+      { "from": "r22", "text": "Ride with someone who's happy to go slow, keep 3-second gaps and plan a stop every 45 minutes.", "hoursAgo": 29 },
+      { "from": "r04", "text": "Same here! Would love a practice ride on quiet roads.", "hoursAgo": 26 }
+    ]
+  },
+  {
+    "id": "adventure-touring", "name": "Adventure & Touring",
+    "description": "Long weekends, multi-day tours and the occasional dirt trail. Share routes, luggage setups and trip reports.",
+    "interests": ["Touring", "Off-road", "Trip planning"], "region": "All of Bengaluru",
+    "members": ["r06", "r09", "r12", "r14", "r16", "r17", "r23"],
+    "messages": [
+      { "from": "r09", "text": "Planning a three-day Western Ghats loop next month. Who's done the forest roads recently?", "hoursAgo": 48 },
+      { "from": "r06", "text": "Did it in the summer. Carry a puncture kit and start early, fuel stops are far apart.", "hoursAgo": 46 }
+    ]
+  },
+  {
+    "id": "sportbike", "name": "Sportbike Riders",
+    "description": "Riders who enjoy twisty roads, track days and getting their lines right, with an emphasis on riding gear and riding within your limits.",
+    "interests": ["Twisties", "Track days", "Riding technique"], "region": "East Bengaluru",
+    "members": ["r05", "r07", "r10", "r15", "r21", "r25"],
+    "messages": [
+      { "from": "r15", "text": "Track school signups open next week for anyone who wants to work on body position.", "hoursAgo": 12 },
+      { "from": "r07", "text": "Interested! Is it okay for intermediate riders?", "hoursAgo": 11 }
+    ]
+  },
+  {
+    "id": "cruiser-community", "name": "Cruiser Community",
+    "description": "Classic and cruiser bikes, long relaxed rides and plenty of photo stops. All makes welcome.",
+    "interests": ["Cruisers", "Classic bikes", "Photo stops"], "region": "North Bengaluru",
+    "members": ["r01", "r02", "r11", "r19", "r22"],
+    "messages": [
+      { "from": "r11", "text": "Sunset ride this week, anyone? Short one, mostly for photos.", "hoursAgo": 6 }
+    ]
+  },
+  {
+    "id": "east-bengaluru", "name": "East Bengaluru Riders",
+    "description": "City-based group for riders around Whitefield, Marathahalli, Indiranagar and HSR. Weekday early rides before work traffic.",
+    "interests": ["Weekday mornings", "City riders", "All styles"], "region": "East Bengaluru",
+    "members": ["r08", "r10", "r12", "r13", "r14", "r15"],
+    "messages": [
+      { "from": "r12", "text": "Pre-work ride tomorrow if the weather holds. Out at 6, back by 8.", "hoursAgo": 3 }
+    ]
+  },
+  {
+    "id": "south-bengaluru", "name": "South Bengaluru Riders",
+    "description": "City-based group for Jayanagar, JP Nagar, Basavanagudi, Koramangala and Electronic City riders.",
+    "interests": ["City riders", "Weekend mornings", "All styles"], "region": "South Bengaluru",
+    "members": ["r01", "r02", "r03", "r04", "r07", "r16", "r24", "r25"],
+    "messages": [
+      { "from": "r24", "text": "Evening ride + dinner on Friday? Keeping it chill.", "hoursAgo": 9 },
+      { "from": "r03", "text": "If it's after 7 I can make it.", "hoursAgo": 8 }
+    ]
+  }
+]

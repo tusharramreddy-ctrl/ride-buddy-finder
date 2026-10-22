@@ -1,0 +1,75 @@
+[
+  {
+    "id": "demo-1", "authorId": "r22", "hoursAgo": 2, "kind": "ride",
+    "text": "Sunrise loop up north this morning. Cool air, empty roads and a long chai stop at the top. Perfect way to start a Sunday.",
+    "bikeId": "hd-x440", "baseLikes": 24,
+    "ride": { "distanceKm": 124.6, "durationMin": 172, "route": [[77.5946,13.0358],[77.5960,13.0710],[77.5967,13.1007],[77.6230,13.1530],[77.6550,13.2050],[77.7050,13.2470],[77.6950,13.3050],[77.6830,13.3700]] },
+    "comments": [
+      { "authorId": "r11", "text": "Those early starts are always worth it!", "hoursAgo": 1 },
+      { "authorId": "r02", "text": "Adding this to my list for when I'm more confident.", "hoursAgo": 1 }
+    ]
+  },
+  {
+    "id": "demo-2", "authorId": "r02", "hoursAgo": 5, "kind": "journey",
+    "text": "One year of riding today! Went from wobbling around an empty parking lot to my first 100 km ride last month. Thanks to everyone in the beginner group for the patience and tips.",
+    "bikeId": "honda-cb350", "baseLikes": 41,
+    "comments": [
+      { "authorId": "r22", "text": "Huge milestone, well done!", "hoursAgo": 4 },
+      { "authorId": "r13", "text": "This is so encouraging. I'm about 3 months in.", "hoursAgo": 3 }
+    ]
+  },
+  {
+    "id": "demo-3", "authorId": "r06", "hoursAgo": 9, "kind": "bike",
+    "text": "New luggage setup for the 390 Adventure is done: soft panniers, a tail bag and a tank bag for snacks. Ready for the Western Ghats loop next month.",
+    "bikeId": "ktm-390-adventure", "baseLikes": 18,
+    "comments": [{ "authorId": "r09", "text": "Clean setup. How's the weight on the rear?", "hoursAgo": 8 }]
+  },
+  {
+    "id": "demo-4", "authorId": "r13", "hoursAgo": 14, "kind": "question",
+    "text": "New to Bengaluru and to riding. What's a good first riding jacket that won't cook me in the city heat? Mesh, or something with removable liners?",
+    "bikeId": "re-hunter-350", "baseLikes": 7,
+    "comments": [
+      { "authorId": "r12", "text": "Mesh with armour for city riding. Get a separate rain layer.", "hoursAgo": 13 },
+      { "authorId": "r04", "text": "Following this, same question!", "hoursAgo": 12 }
+    ]
+  },
+  {
+    "id": "demo-5", "authorId": "r10", "hoursAgo": 22, "kind": "ride",
+    "text": "Pre-office loop before the traffic woke up. Kept it smooth and steady on the bends.",
+    "bikeId": "triumph-speed-400", "baseLikes": 15,
+    "ride": { "distanceKm": 46.3, "durationMin": 68, "route": [[77.6408,12.9784],[77.6700,12.9600],[77.7000,12.9520],[77.7480,12.9700],[77.7500,12.9950],[77.7100,13.0100],[77.6600,12.9950],[77.6408,12.9784]] },
+    "comments": []
+  },
+  {
+    "id": "demo-6", "authorId": "r18", "hoursAgo": 26, "kind": "group-ride",
+    "text": "Small Sunday coffee ride for anyone new to group riding. Max 6 bikes, relaxed pace, regroup at every turn. Reply in the Weekend Scenic Riders group to join.",
+    "bikeId": "jawa-42", "baseLikes": 22,
+    "plan": { "when": "Sunday morning", "area": "Malleshwaram" },
+    "comments": [{ "authorId": "r20", "text": "Would love to join if there's space!", "hoursAgo": 25 }]
+  },
+  {
+    "id": "demo-7", "authorId": "r09", "hoursAgo": 33, "kind": "road",
+    "text": "The forest stretch on the way to the coffee estates is pure magic right now: green everywhere and mist in the mornings. Go slow, there are animals crossing and surprise potholes.",
+    "bikeId": "re-himalayan-450", "baseLikes": 37,
+    "comments": [{ "authorId": "r16", "text": "Taking this route next weekend. Thanks for the pothole warning.", "hoursAgo": 30 }]
+  },
+  {
+    "id": "demo-8", "authorId": "r15", "hoursAgo": 40, "kind": "journey",
+    "text": "Third track school session done. Biggest lesson: look further through the corner and everything slows down. Gear check before every session, always.",
+    "bikeId": "aprilia-rs-457", "baseLikes": 19,
+    "comments": []
+  },
+  {
+    "id": "demo-9", "authorId": "r17", "hoursAgo": 52, "kind": "ride",
+    "text": "First proper dirt trail with a friend. Stood up on the pegs for most of it and only stalled twice. Small win!",
+    "bikeId": "hero-xpulse-200", "baseLikes": 28,
+    "ride": { "distanceKm": 38.9, "durationMin": 95, "route": [[77.6600,12.8450],[77.6400,12.8100],[77.6100,12.7800],[77.5800,12.7600],[77.5650,12.7350],[77.5900,12.7200]] },
+    "comments": [{ "authorId": "r06", "text": "Standing on the pegs is the way. Nice one!", "hoursAgo": 50 }]
+  },
+  {
+    "id": "demo-10", "authorId": "r12", "hoursAgo": 70, "kind": "bike",
+    "text": "Just crossed 30,000 km on the Versys. Fresh chain and sprockets, new tyres, and it's ready for another season of weekend touring.",
+    "bikeId": "kawasaki-versys-650", "baseLikes": 25,
+    "comments": []
+  }
+]

@@ -1,9 +1,9 @@
 import "server-only";
 import { z } from "zod";
-import { CHARACTERS, slotLabel } from "./constants";
+import { AREAS, BIKE_TYPES, CHARACTER_IDS, CHARACTERS, LEVELS, SLOT_IDS, slotLabel } from "./constants";
 import { inCommon } from "./filters";
 import type { AiPick } from "./matching";
-import { bikeLabel, bikeType, type Profile } from "./profile";
+import { prefsBikeLabel, prefsBikeType, type MatchPrefs } from "./prefs";
 import { riderBike, type DemoRider } from "./riders";
 
 // Every AI call lives in this file. We reach a Gemini model through
@@ -97,20 +97,20 @@ function strictObject(properties: Record<string, object>): object {
   return { type: "object", properties, required: Object.keys(properties), additionalProperties: false };
 }
 
-function describeProfile(p: Profile) {
+function describeProfile(p: MatchPrefs) {
   return {
     name: p.name,
     level: p.level,
-    bike: bikeLabel(p.bike),
-    bikeType: bikeType(p.bike),
-    ridingCharacter: CHARACTERS[p.character].name,
-    pace: CHARACTERS[p.character].pace,
+    bike: prefsBikeLabel(p) ?? "not given",
+    bikeType: prefsBikeType(p) ?? "not given",
+    ridingCharacter: CHARACTERS[p.style].name,
+    pace: CHARACTERS[p.style].pace,
     area: p.area,
     freeTimes: p.availability.map(slotLabel),
   };
 }
 
-function describeRider(r: DemoRider, p: Profile) {
+function describeRider(r: DemoRider, p: MatchPrefs) {
   const bike = riderBike(r);
   return {
     inCommonWithRider: inCommon(p, r),
@@ -158,7 +158,7 @@ const rankSchema = z.object({
   matches: z.array(z.object({ riderId: z.string(), reason: z.string() })),
 });
 
-export async function rankMatches(profile: Profile, candidates: DemoRider[]): Promise<AiPick[]> {
+export async function rankMatches(profile: MatchPrefs, candidates: DemoRider[]): Promise<AiPick[]> {
   const result = await askForJson({
     system:
       "You help motorcycle riders in Bengaluru find compatible riding partners. " +
@@ -191,7 +191,7 @@ export async function rankMatches(profile: Profile, candidates: DemoRider[]): Pr
 
 const introSchema = z.object({ message: z.string().min(20).max(1200) });
 
-export async function draftIntro(profile: Profile, rider: DemoRider): Promise<string> {
+export async function draftIntro(profile: MatchPrefs, rider: DemoRider): Promise<string> {
   const result = await askForJson({
     system:
       "You write a short, warm first message from one motorcycle rider to another who might ride together. " +
@@ -212,4 +212,55 @@ export async function draftIntro(profile: Profile, rider: DemoRider): Promise<st
     fast: true,
   });
   return result.message.trim();
+}
+
+// ---- 4. Read a rider's sentence into structured preferences ----
+// The AI only fills fields it can find in the text and leaves the rest null.
+// Code then checks every value against the allowed lists, and the rider
+// reviews and corrects everything before matching.
+
+const nullableEnum = (values: readonly string[]) => ({ anyOf: [{ type: "string", enum: values }, { type: "null" }] });
+
+const interpretSchema = z.object({
+  isAboutRiding: z.boolean(),
+  level: z.enum(LEVELS).nullable(),
+  area: z.enum(AREAS).nullable(),
+  availability: z.array(z.enum(SLOT_IDS)),
+  style: z.enum(CHARACTER_IDS).nullable(),
+  bikeText: z.string().max(60).nullable(),
+  bikeType: z.enum(BIKE_TYPES).nullable(),
+  womenOnly: z.boolean(),
+});
+export type Interpretation = z.infer<typeof interpretSchema>;
+
+export async function interpretDescription(text: string): Promise<Interpretation> {
+  return askForJson({
+    system:
+      "You turn a motorcycle rider's description of themselves into structured fields. " +
+      "Only fill a field when the text clearly supports it; otherwise use null (or [] / false). Never guess. " +
+      "level: Beginner (<2 years or says new/learning), Intermediate, Advanced (many years, long tours, track). " +
+      `area: one of the listed Bengaluru areas only if the text names it or a very clear landmark inside it. ` +
+      "availability: weekday-mornings, weekday-evenings, weekend-mornings, weekend-afternoons (e.g. 'Sundays early' = weekend-mornings). " +
+      "style: cruiser (relaxed scenic), explorer (touring, long trips, off-road), carver (twisties, spirited, fast), social (group/breakfast rides). " +
+      "bikeText: the bike exactly as the rider wrote it (make and model), else null. " +
+      "womenOnly: true only if the rider explicitly asks to ride with women only. " +
+      "isAboutRiding: false if the text is not about riding motorcycles or scooters. " +
+      DATA_NOTE,
+    prompt: JSON.stringify({ areas: AREAS, description: text }),
+    jsonSchema: strictObject({
+      isAboutRiding: { type: "boolean" },
+      level: nullableEnum(LEVELS),
+      area: nullableEnum(AREAS),
+      availability: { type: "array", items: { type: "string", enum: SLOT_IDS } },
+      style: nullableEnum(CHARACTER_IDS),
+      bikeText: { anyOf: [{ type: "string" }, { type: "null" }] },
+      bikeType: nullableEnum(BIKE_TYPES),
+      womenOnly: { type: "boolean" },
+    }),
+    zodSchema: interpretSchema,
+    totalMs: 12000,
+    attempts: 2,
+    effort: "minimal",
+    fast: true,
+  });
 }

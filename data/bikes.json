@@ -1,130 +1,200 @@
 [
-  { "brand": "Royal Enfield", "models": [
-    { "id": "re-classic-350", "name": "Classic 350", "type": "Cruiser" },
-    { "id": "re-bullet-350", "name": "Bullet 350", "type": "Cruiser" },
-    { "id": "re-hunter-350", "name": "Hunter 350", "type": "Naked" },
-    { "id": "re-meteor-350", "name": "Meteor 350", "type": "Cruiser" },
-    { "id": "re-himalayan-450", "name": "Himalayan 450", "type": "Adventure" },
-    { "id": "re-scram-440", "name": "Scram 440", "type": "Adventure" },
-    { "id": "re-interceptor-650", "name": "Interceptor 650", "type": "Tourer" },
-    { "id": "re-continental-gt-650", "name": "Continental GT 650", "type": "Sport" },
-    { "id": "re-super-meteor-650", "name": "Super Meteor 650", "type": "Cruiser" }
+  { "id": "bmw", "name": "BMW Motorrad", "models": [
+    { "id": "bmw-g310r", "name": "G 310 R", "cc": 313, "type": "Naked" },
+    { "id": "bmw-g310gs", "name": "G 310 GS", "cc": 313, "type": "Adventure" },
+    { "id": "bmw-g310rr", "name": "G 310 RR", "cc": 313, "type": "Sport" },
+    { "id": "bmw-f900r", "name": "F 900 R", "cc": 895, "type": "Naked" },
+    { "id": "bmw-f900gs", "name": "F 900 GS", "cc": 895, "type": "Adventure" },
+    { "id": "bmw-f900xr", "name": "F 900 XR", "cc": 895, "type": "Tourer" },
+    { "id": "bmw-r1300gs", "name": "R 1300 GS", "cc": 1300, "type": "Adventure" },
+    { "id": "bmw-r1300gsa", "name": "R 1300 GS Adventure", "cc": 1300, "type": "Adventure" },
+    { "id": "bmw-r1250rt", "name": "R 1250 RT", "cc": 1254, "type": "Tourer" },
+    { "id": "bmw-s1000rr", "name": "S 1000 RR", "cc": 999, "type": "Sport" },
+    { "id": "bmw-m1000rr", "name": "M 1000 RR", "cc": 999, "type": "Sport" },
+    { "id": "bmw-r12ninet", "name": "R 12 nineT", "cc": 1170, "type": "Naked" },
+    { "id": "bmw-r18", "name": "R 18", "cc": 1802, "type": "Cruiser" },
+    { "id": "bmw-ce04", "name": "CE 04 (electric)", "cc": null, "type": "Scooter" }
   ]},
-  { "brand": "Honda", "models": [
-    { "id": "honda-shine-125", "name": "Shine 125", "type": "Commuter" },
-    { "id": "honda-sp-125", "name": "SP 125", "type": "Commuter" },
-    { "id": "honda-unicorn", "name": "Unicorn", "type": "Commuter" },
-    { "id": "honda-hornet-2", "name": "Hornet 2.0", "type": "Naked" },
-    { "id": "honda-cb350", "name": "CB350", "type": "Cruiser" },
-    { "id": "honda-cb300r", "name": "CB300R", "type": "Naked" },
-    { "id": "honda-nx500", "name": "NX500", "type": "Adventure" },
-    { "id": "honda-activa", "name": "Activa", "type": "Scooter" }
+  { "id": "royal-enfield", "name": "Royal Enfield", "models": [
+    { "id": "re-classic-350", "name": "Classic 350", "cc": 349, "type": "Cruiser" },
+    { "id": "re-bullet-350", "name": "Bullet 350", "cc": 349, "type": "Cruiser" },
+    { "id": "re-hunter-350", "name": "Hunter 350", "cc": 349, "type": "Naked" },
+    { "id": "re-meteor-350", "name": "Meteor 350", "cc": 349, "type": "Cruiser" },
+    { "id": "re-himalayan-450", "name": "Himalayan 450", "cc": 452, "type": "Adventure" },
+    { "id": "re-guerrilla-450", "name": "Guerrilla 450", "cc": 452, "type": "Naked" },
+    { "id": "re-scram-440", "name": "Scram 440", "cc": 443, "type": "Adventure" },
+    { "id": "re-interceptor-650", "name": "Interceptor 650", "cc": 648, "type": "Tourer" },
+    { "id": "re-continental-gt-650", "name": "Continental GT 650", "cc": 648, "type": "Sport" },
+    { "id": "re-super-meteor-650", "name": "Super Meteor 650", "cc": 648, "type": "Cruiser" },
+    { "id": "re-shotgun-650", "name": "Shotgun 650", "cc": 648, "type": "Cruiser" },
+    { "id": "re-bear-650", "name": "Bear 650", "cc": 648, "type": "Adventure" }
   ]},
-  { "brand": "Hero", "models": [
-    { "id": "hero-splendor-plus", "name": "Splendor Plus", "type": "Commuter" },
-    { "id": "hero-glamour", "name": "Glamour", "type": "Commuter" },
-    { "id": "hero-xtreme-160r", "name": "Xtreme 160R", "type": "Naked" },
-    { "id": "hero-xpulse-200", "name": "XPulse 200 4V", "type": "Adventure" },
-    { "id": "hero-mavrick-440", "name": "Mavrick 440", "type": "Naked" },
-    { "id": "hero-xoom", "name": "Xoom 110", "type": "Scooter" }
+  { "id": "ktm", "name": "KTM", "models": [
+    { "id": "ktm-duke-200", "name": "200 Duke", "cc": 199, "type": "Naked" },
+    { "id": "ktm-duke-390", "name": "390 Duke", "cc": 399, "type": "Naked" },
+    { "id": "ktm-rc-390", "name": "RC 390", "cc": 373, "type": "Sport" },
+    { "id": "ktm-250-adventure", "name": "250 Adventure", "cc": 249, "type": "Adventure" },
+    { "id": "ktm-390-adventure", "name": "390 Adventure", "cc": 399, "type": "Adventure" },
+    { "id": "ktm-890-adventure", "name": "890 Adventure", "cc": 889, "type": "Adventure" },
+    { "id": "ktm-1390-super-duke", "name": "1390 Super Duke R", "cc": 1350, "type": "Naked" }
   ]},
-  { "brand": "Bajaj", "models": [
-    { "id": "bajaj-pulsar-150", "name": "Pulsar 150", "type": "Commuter" },
-    { "id": "bajaj-pulsar-ns200", "name": "Pulsar NS200", "type": "Naked" },
-    { "id": "bajaj-pulsar-rs200", "name": "Pulsar RS200", "type": "Sport" },
-    { "id": "bajaj-pulsar-n250", "name": "Pulsar N250", "type": "Naked" },
-    { "id": "bajaj-dominar-400", "name": "Dominar 400", "type": "Tourer" },
-    { "id": "bajaj-avenger-220", "name": "Avenger Cruise 220", "type": "Cruiser" },
-    { "id": "bajaj-platina", "name": "Platina 110", "type": "Commuter" },
-    { "id": "bajaj-chetak", "name": "Chetak (electric)", "type": "Scooter" }
+  { "id": "honda", "name": "Honda", "models": [
+    { "id": "honda-shine-125", "name": "Shine 125", "cc": 124, "type": "Commuter" },
+    { "id": "honda-sp-125", "name": "SP 125", "cc": 124, "type": "Commuter" },
+    { "id": "honda-unicorn", "name": "Unicorn", "cc": 162, "type": "Commuter" },
+    { "id": "honda-hornet-2", "name": "Hornet 2.0", "cc": 184, "type": "Naked" },
+    { "id": "honda-cb350", "name": "CB350", "cc": 348, "type": "Cruiser" },
+    { "id": "honda-cb300r", "name": "CB300R", "cc": 286, "type": "Naked" },
+    { "id": "honda-nx500", "name": "NX500", "cc": 471, "type": "Adventure" },
+    { "id": "honda-cbr650r", "name": "CBR650R", "cc": 649, "type": "Sport" },
+    { "id": "honda-africa-twin", "name": "Africa Twin", "cc": 1084, "type": "Adventure" },
+    { "id": "honda-activa", "name": "Activa", "cc": 109, "type": "Scooter" }
   ]},
-  { "brand": "TVS", "models": [
-    { "id": "tvs-apache-rtr-160", "name": "Apache RTR 160 4V", "type": "Naked" },
-    { "id": "tvs-apache-rtr-310", "name": "Apache RTR 310", "type": "Naked" },
-    { "id": "tvs-apache-rr-310", "name": "Apache RR 310", "type": "Sport" },
-    { "id": "tvs-ronin", "name": "Ronin", "type": "Cruiser" },
-    { "id": "tvs-raider-125", "name": "Raider 125", "type": "Commuter" },
-    { "id": "tvs-jupiter", "name": "Jupiter", "type": "Scooter" },
-    { "id": "tvs-ntorq-125", "name": "Ntorq 125", "type": "Scooter" },
-    { "id": "tvs-iqube", "name": "iQube (electric)", "type": "Scooter" }
+  { "id": "yamaha", "name": "Yamaha", "models": [
+    { "id": "yamaha-fz-s", "name": "FZ-S", "cc": 149, "type": "Naked" },
+    { "id": "yamaha-fz-x", "name": "FZ-X", "cc": 149, "type": "Commuter" },
+    { "id": "yamaha-mt-15", "name": "MT-15", "cc": 155, "type": "Naked" },
+    { "id": "yamaha-r15", "name": "R15", "cc": 155, "type": "Sport" },
+    { "id": "yamaha-r3", "name": "R3", "cc": 321, "type": "Sport" },
+    { "id": "yamaha-mt-09", "name": "MT-09", "cc": 890, "type": "Naked" },
+    { "id": "yamaha-tenere-700", "name": "Ténéré 700", "cc": 689, "type": "Adventure" },
+    { "id": "yamaha-aerox-155", "name": "Aerox 155", "cc": 155, "type": "Scooter" },
+    { "id": "yamaha-rayzr", "name": "RayZR 125", "cc": 125, "type": "Scooter" }
   ]},
-  { "brand": "Yamaha", "models": [
-    { "id": "yamaha-fz-s", "name": "FZ-S", "type": "Naked" },
-    { "id": "yamaha-mt-15", "name": "MT-15", "type": "Naked" },
-    { "id": "yamaha-r15", "name": "R15", "type": "Sport" },
-    { "id": "yamaha-r3", "name": "R3", "type": "Sport" },
-    { "id": "yamaha-fz-x", "name": "FZ-X", "type": "Commuter" },
-    { "id": "yamaha-aerox-155", "name": "Aerox 155", "type": "Scooter" },
-    { "id": "yamaha-rayzr", "name": "RayZR 125", "type": "Scooter" }
+  { "id": "kawasaki", "name": "Kawasaki", "models": [
+    { "id": "kawasaki-ninja-300", "name": "Ninja 300", "cc": 296, "type": "Sport" },
+    { "id": "kawasaki-ninja-500", "name": "Ninja 500", "cc": 451, "type": "Sport" },
+    { "id": "kawasaki-eliminator", "name": "Eliminator 500", "cc": 451, "type": "Cruiser" },
+    { "id": "kawasaki-z650", "name": "Z650", "cc": 649, "type": "Naked" },
+    { "id": "kawasaki-versys-650", "name": "Versys 650", "cc": 649, "type": "Tourer" },
+    { "id": "kawasaki-z900", "name": "Z900", "cc": 948, "type": "Naked" },
+    { "id": "kawasaki-zx10r", "name": "Ninja ZX-10R", "cc": 998, "type": "Sport" }
   ]},
-  { "brand": "Suzuki", "models": [
-    { "id": "suzuki-gixxer", "name": "Gixxer", "type": "Naked" },
-    { "id": "suzuki-gixxer-sf-250", "name": "Gixxer SF 250", "type": "Sport" },
-    { "id": "suzuki-v-strom-sx", "name": "V-Strom SX", "type": "Adventure" },
-    { "id": "suzuki-v-strom-800", "name": "V-Strom 800DE", "type": "Adventure" },
-    { "id": "suzuki-hayabusa", "name": "Hayabusa", "type": "Sport" },
-    { "id": "suzuki-access-125", "name": "Access 125", "type": "Scooter" },
-    { "id": "suzuki-burgman", "name": "Burgman Street", "type": "Scooter" }
+  { "id": "suzuki", "name": "Suzuki", "models": [
+    { "id": "suzuki-gixxer", "name": "Gixxer", "cc": 155, "type": "Naked" },
+    { "id": "suzuki-gixxer-sf-250", "name": "Gixxer SF 250", "cc": 249, "type": "Sport" },
+    { "id": "suzuki-v-strom-sx", "name": "V-Strom SX", "cc": 249, "type": "Adventure" },
+    { "id": "suzuki-v-strom-800", "name": "V-Strom 800DE", "cc": 776, "type": "Adventure" },
+    { "id": "suzuki-hayabusa", "name": "Hayabusa", "cc": 1340, "type": "Sport" },
+    { "id": "suzuki-access-125", "name": "Access 125", "cc": 124, "type": "Scooter" },
+    { "id": "suzuki-burgman", "name": "Burgman Street", "cc": 124, "type": "Scooter" }
   ]},
-  { "brand": "KTM", "models": [
-    { "id": "ktm-duke-200", "name": "200 Duke", "type": "Naked" },
-    { "id": "ktm-duke-390", "name": "390 Duke", "type": "Naked" },
-    { "id": "ktm-rc-390", "name": "RC 390", "type": "Sport" },
-    { "id": "ktm-390-adventure", "name": "390 Adventure", "type": "Adventure" },
-    { "id": "ktm-250-adventure", "name": "250 Adventure", "type": "Adventure" }
+  { "id": "ducati", "name": "Ducati", "models": [
+    { "id": "ducati-scrambler-icon", "name": "Scrambler Icon", "cc": 803, "type": "Naked" },
+    { "id": "ducati-monster", "name": "Monster", "cc": 890, "type": "Naked" },
+    { "id": "ducati-panigale-v2", "name": "Panigale V2", "cc": 890, "type": "Sport" },
+    { "id": "ducati-panigale-v4", "name": "Panigale V4", "cc": 1103, "type": "Sport" },
+    { "id": "ducati-streetfighter-v4", "name": "Streetfighter V4", "cc": 1103, "type": "Naked" },
+    { "id": "ducati-multistrada-v4", "name": "Multistrada V4", "cc": 1158, "type": "Adventure" },
+    { "id": "ducati-desertx", "name": "DesertX", "cc": 937, "type": "Adventure" },
+    { "id": "ducati-diavel-v4", "name": "Diavel V4", "cc": 1158, "type": "Cruiser" }
   ]},
-  { "brand": "Kawasaki", "models": [
-    { "id": "kawasaki-ninja-300", "name": "Ninja 300", "type": "Sport" },
-    { "id": "kawasaki-ninja-500", "name": "Ninja 500", "type": "Sport" },
-    { "id": "kawasaki-z650", "name": "Z650", "type": "Naked" },
-    { "id": "kawasaki-versys-650", "name": "Versys 650", "type": "Tourer" },
-    { "id": "kawasaki-eliminator", "name": "Eliminator 500", "type": "Cruiser" },
-    { "id": "kawasaki-z900", "name": "Z900", "type": "Naked" }
+  { "id": "triumph", "name": "Triumph", "models": [
+    { "id": "triumph-speed-400", "name": "Speed 400", "cc": 398, "type": "Naked" },
+    { "id": "triumph-scrambler-400x", "name": "Scrambler 400 X", "cc": 398, "type": "Adventure" },
+    { "id": "triumph-trident-660", "name": "Trident 660", "cc": 660, "type": "Naked" },
+    { "id": "triumph-street-triple-765", "name": "Street Triple 765", "cc": 765, "type": "Naked" },
+    { "id": "triumph-tiger-900", "name": "Tiger 900", "cc": 888, "type": "Adventure" },
+    { "id": "triumph-bonneville-t120", "name": "Bonneville T120", "cc": 1200, "type": "Cruiser" },
+    { "id": "triumph-speed-twin-1200", "name": "Speed Twin 1200", "cc": 1200, "type": "Naked" }
   ]},
-  { "brand": "Jawa", "models": [
-    { "id": "jawa-350", "name": "Jawa 350", "type": "Cruiser" },
-    { "id": "jawa-42", "name": "Jawa 42", "type": "Cruiser" },
-    { "id": "jawa-perak", "name": "Perak", "type": "Cruiser" }
+  { "id": "harley-davidson", "name": "Harley-Davidson", "models": [
+    { "id": "hd-x440", "name": "X440", "cc": 440, "type": "Cruiser" },
+    { "id": "hd-nightster", "name": "Nightster", "cc": 975, "type": "Cruiser" },
+    { "id": "hd-street-bob", "name": "Street Bob", "cc": 1923, "type": "Cruiser" },
+    { "id": "hd-fat-boy", "name": "Fat Boy", "cc": 1923, "type": "Cruiser" },
+    { "id": "hd-pan-america", "name": "Pan America 1250", "cc": 1252, "type": "Adventure" }
   ]},
-  { "brand": "Yezdi", "models": [
-    { "id": "yezdi-adventure", "name": "Adventure", "type": "Adventure" },
-    { "id": "yezdi-scrambler", "name": "Scrambler", "type": "Adventure" },
-    { "id": "yezdi-roadster", "name": "Roadster", "type": "Cruiser" }
+  { "id": "tvs", "name": "TVS", "models": [
+    { "id": "tvs-raider-125", "name": "Raider 125", "cc": 124, "type": "Commuter" },
+    { "id": "tvs-apache-rtr-160", "name": "Apache RTR 160 4V", "cc": 160, "type": "Naked" },
+    { "id": "tvs-ronin", "name": "Ronin", "cc": 225, "type": "Cruiser" },
+    { "id": "tvs-apache-rtr-310", "name": "Apache RTR 310", "cc": 312, "type": "Naked" },
+    { "id": "tvs-apache-rr-310", "name": "Apache RR 310", "cc": 312, "type": "Sport" },
+    { "id": "tvs-jupiter", "name": "Jupiter", "cc": 113, "type": "Scooter" },
+    { "id": "tvs-ntorq-125", "name": "Ntorq 125", "cc": 124, "type": "Scooter" },
+    { "id": "tvs-iqube", "name": "iQube (electric)", "cc": null, "type": "Scooter" }
   ]},
-  { "brand": "BSA", "models": [
-    { "id": "bsa-gold-star-650", "name": "Gold Star 650", "type": "Cruiser" }
+  { "id": "bajaj", "name": "Bajaj", "models": [
+    { "id": "bajaj-platina", "name": "Platina 110", "cc": 115, "type": "Commuter" },
+    { "id": "bajaj-pulsar-150", "name": "Pulsar 150", "cc": 149, "type": "Commuter" },
+    { "id": "bajaj-pulsar-ns200", "name": "Pulsar NS200", "cc": 199, "type": "Naked" },
+    { "id": "bajaj-pulsar-rs200", "name": "Pulsar RS200", "cc": 199, "type": "Sport" },
+    { "id": "bajaj-avenger-220", "name": "Avenger Cruise 220", "cc": 220, "type": "Cruiser" },
+    { "id": "bajaj-pulsar-n250", "name": "Pulsar N250", "cc": 249, "type": "Naked" },
+    { "id": "bajaj-dominar-400", "name": "Dominar 400", "cc": 373, "type": "Tourer" },
+    { "id": "bajaj-chetak", "name": "Chetak (electric)", "cc": null, "type": "Scooter" }
   ]},
-  { "brand": "Triumph", "models": [
-    { "id": "triumph-speed-400", "name": "Speed 400", "type": "Naked" },
-    { "id": "triumph-scrambler-400x", "name": "Scrambler 400 X", "type": "Adventure" },
-    { "id": "triumph-trident-660", "name": "Trident 660", "type": "Naked" },
-    { "id": "triumph-tiger-900", "name": "Tiger 900", "type": "Adventure" }
+  { "id": "hero", "name": "Hero", "models": [
+    { "id": "hero-splendor-plus", "name": "Splendor Plus", "cc": 97, "type": "Commuter" },
+    { "id": "hero-glamour", "name": "Glamour", "cc": 124, "type": "Commuter" },
+    { "id": "hero-xtreme-160r", "name": "Xtreme 160R", "cc": 163, "type": "Naked" },
+    { "id": "hero-xpulse-200", "name": "XPulse 200 4V", "cc": 200, "type": "Adventure" },
+    { "id": "hero-mavrick-440", "name": "Mavrick 440", "cc": 440, "type": "Naked" },
+    { "id": "hero-xoom", "name": "Xoom 110", "cc": 110, "type": "Scooter" }
   ]},
-  { "brand": "Harley-Davidson", "models": [
-    { "id": "hd-x440", "name": "X440", "type": "Cruiser" },
-    { "id": "hd-nightster", "name": "Nightster", "type": "Cruiser" },
-    { "id": "hd-pan-america", "name": "Pan America 1250", "type": "Adventure" }
+  { "id": "aprilia", "name": "Aprilia", "models": [
+    { "id": "aprilia-sr-160", "name": "SR 160", "cc": 160, "type": "Scooter" },
+    { "id": "aprilia-rs-457", "name": "RS 457", "cc": 457, "type": "Sport" },
+    { "id": "aprilia-tuono-457", "name": "Tuono 457", "cc": 457, "type": "Naked" },
+    { "id": "aprilia-rs-660", "name": "RS 660", "cc": 659, "type": "Sport" },
+    { "id": "aprilia-tuareg-660", "name": "Tuareg 660", "cc": 659, "type": "Adventure" }
   ]},
-  { "brand": "Benelli", "models": [
-    { "id": "benelli-trk-502", "name": "TRK 502", "type": "Adventure" },
-    { "id": "benelli-leoncino-500", "name": "Leoncino 500", "type": "Naked" },
-    { "id": "benelli-502c", "name": "502C", "type": "Cruiser" }
+  { "id": "husqvarna", "name": "Husqvarna", "models": [
+    { "id": "husqvarna-svartpilen-250", "name": "Svartpilen 250", "cc": 249, "type": "Naked" },
+    { "id": "husqvarna-svartpilen-401", "name": "Svartpilen 401", "cc": 399, "type": "Naked" },
+    { "id": "husqvarna-vitpilen-401", "name": "Vitpilen 401", "cc": 399, "type": "Naked" },
+    { "id": "husqvarna-norden-901", "name": "Norden 901", "cc": 889, "type": "Adventure" }
   ]},
-  { "brand": "Aprilia", "models": [
-    { "id": "aprilia-rs-457", "name": "RS 457", "type": "Sport" },
-    { "id": "aprilia-tuono-457", "name": "Tuono 457", "type": "Naked" },
-    { "id": "aprilia-sr-160", "name": "SR 160", "type": "Scooter" }
+  { "id": "benelli", "name": "Benelli", "models": [
+    { "id": "benelli-imperiale-400", "name": "Imperiale 400", "cc": 374, "type": "Cruiser" },
+    { "id": "benelli-trk-502", "name": "TRK 502", "cc": 500, "type": "Adventure" },
+    { "id": "benelli-leoncino-500", "name": "Leoncino 500", "cc": 500, "type": "Naked" },
+    { "id": "benelli-502c", "name": "502C", "cc": 500, "type": "Cruiser" }
   ]},
-  { "brand": "Ola Electric", "models": [
-    { "id": "ola-s1-pro", "name": "S1 Pro", "type": "Scooter" },
-    { "id": "ola-s1-x", "name": "S1 X", "type": "Scooter" },
-    { "id": "ola-roadster", "name": "Roadster", "type": "Naked" }
+  { "id": "cfmoto", "name": "CFMoto", "models": [
+    { "id": "cfmoto-300nk", "name": "300NK", "cc": 292, "type": "Naked" },
+    { "id": "cfmoto-300sr", "name": "300SR", "cc": 292, "type": "Sport" },
+    { "id": "cfmoto-450mt", "name": "450MT", "cc": 449, "type": "Adventure" },
+    { "id": "cfmoto-650nk", "name": "650NK", "cc": 649, "type": "Naked" },
+    { "id": "cfmoto-650mt", "name": "650MT", "cc": 649, "type": "Tourer" },
+    { "id": "cfmoto-800mt", "name": "800MT", "cc": 799, "type": "Adventure" }
   ]},
-  { "brand": "Ather", "models": [
-    { "id": "ather-450x", "name": "450X", "type": "Scooter" },
-    { "id": "ather-rizta", "name": "Rizta", "type": "Scooter" }
+  { "id": "moto-guzzi", "name": "Moto Guzzi", "models": [
+    { "id": "guzzi-v7-stone", "name": "V7 Stone", "cc": 853, "type": "Cruiser" },
+    { "id": "guzzi-v85-tt", "name": "V85 TT", "cc": 853, "type": "Adventure" },
+    { "id": "guzzi-v100-mandello", "name": "V100 Mandello", "cc": 1042, "type": "Tourer" },
+    { "id": "guzzi-stelvio", "name": "Stelvio", "cc": 1042, "type": "Adventure" }
   ]},
-  { "brand": "Ultraviolette", "models": [
-    { "id": "uv-f77", "name": "F77 Mach 2", "type": "Sport" }
+  { "id": "indian", "name": "Indian Motorcycle", "models": [
+    { "id": "indian-scout-bobber", "name": "Scout Bobber", "cc": 1250, "type": "Cruiser" },
+    { "id": "indian-ftr", "name": "FTR", "cc": 1203, "type": "Naked" },
+    { "id": "indian-chief", "name": "Chief", "cc": 1890, "type": "Cruiser" },
+    { "id": "indian-chieftain", "name": "Chieftain", "cc": 1890, "type": "Tourer" }
+  ]},
+  { "id": "jawa", "name": "Jawa", "models": [
+    { "id": "jawa-42", "name": "Jawa 42", "cc": 294, "type": "Cruiser" },
+    { "id": "jawa-350", "name": "Jawa 350", "cc": 334, "type": "Cruiser" },
+    { "id": "jawa-perak", "name": "Perak", "cc": 334, "type": "Cruiser" }
+  ]},
+  { "id": "yezdi", "name": "Yezdi", "models": [
+    { "id": "yezdi-roadster", "name": "Roadster", "cc": 334, "type": "Cruiser" },
+    { "id": "yezdi-scrambler", "name": "Scrambler", "cc": 334, "type": "Adventure" },
+    { "id": "yezdi-adventure", "name": "Adventure", "cc": 334, "type": "Adventure" }
+  ]},
+  { "id": "bsa", "name": "BSA", "models": [
+    { "id": "bsa-gold-star-650", "name": "Gold Star 650", "cc": 652, "type": "Cruiser" }
+  ]},
+  { "id": "ola", "name": "Ola Electric", "models": [
+    { "id": "ola-s1-x", "name": "S1 X", "cc": null, "type": "Scooter" },
+    { "id": "ola-s1-pro", "name": "S1 Pro", "cc": null, "type": "Scooter" },
+    { "id": "ola-roadster", "name": "Roadster", "cc": null, "type": "Naked" }
+  ]},
+  { "id": "ather", "name": "Ather", "models": [
+    { "id": "ather-450x", "name": "450X", "cc": null, "type": "Scooter" },
+    { "id": "ather-rizta", "name": "Rizta", "cc": null, "type": "Scooter" }
+  ]},
+  { "id": "ultraviolette", "name": "Ultraviolette", "models": [
+    { "id": "uv-f77", "name": "F77 Mach 2", "cc": null, "type": "Sport" }
   ]}
 ]
