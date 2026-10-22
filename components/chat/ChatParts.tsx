@@ -171,7 +171,7 @@ export function ChatNotFound() {
           <p className="mt-2 text-sm text-muted">The link may be mistyped, or the rider or group doesn&apos;t exist in this prototype.</p>
           <Link
             href="/chat"
-            className="mt-5 inline-flex h-11 items-center gap-2 rounded-full bg-ink px-5 text-sm font-semibold text-white hover:bg-ink-2"
+            className="mt-5 inline-flex h-11 items-center gap-2 rounded-full bg-ink px-5 text-sm font-semibold text-on-ink hover:bg-ink-2"
           >
             <ArrowLeft aria-hidden className="h-4 w-4" /> Back to chats
           </Link>

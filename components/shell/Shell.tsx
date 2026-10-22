@@ -6,6 +6,7 @@ import type { ReactNode } from "react";
 import { House, Map as MapIcon, MessageCircle, Plus, Route, User } from "lucide-react";
 import { useStore } from "@/lib/store";
 import { Logo } from "../Brand";
+import { ThemeButton, ThemeToggle } from "../ThemeToggle";
 import { Avatar, Button, ErrorMessage, Toaster } from "../ui";
 import { ComposerDialog } from "../home/Composer";
 import { Welcome } from "./Welcome";
@@ -42,9 +43,9 @@ export function Shell({ children }: { children: ReactNode }) {
                 key={item.href}
                 href={item.href}
                 aria-current={active ? "page" : undefined}
-                className={`flex items-center gap-3 rounded-xl px-3 py-2.5 text-[15px] font-semibold transition-colors ${active ? "bg-ink text-white" : "text-ink-2 hover:bg-surface-2 hover:text-ink"}`}
+                className={`flex items-center gap-3 rounded-xl px-3 py-2.5 text-[15px] font-semibold transition-colors ${active ? "bg-ink text-on-ink" : "text-ink-2 hover:bg-surface-2 hover:text-ink"}`}
               >
-                <Icon aria-hidden className={`h-5 w-5 ${active ? "text-accent" : ""}`} />
+                <Icon aria-hidden className={`h-5 w-5 ${active ? "text-on-ink-accent" : ""}`} />
                 {item.label}
               </Link>
             );
@@ -62,6 +63,7 @@ export function Shell({ children }: { children: ReactNode }) {
           </Link>
         </div>
         <div className="mt-auto space-y-3">
+          <ThemeToggle />
           <p className="rounded-xl bg-surface-2 px-3 py-2.5 text-xs leading-relaxed text-muted">
             <strong className="text-ink-2">Prototype.</strong> Your profile, posts, chats and rides are saved on this device
             only. Other riders are fictional demo profiles.
@@ -82,9 +84,12 @@ export function Shell({ children }: { children: ReactNode }) {
           <Link href="/" aria-label="Ride Buddy home">
             <Logo size={30} />
           </Link>
-          <Link href="/profile" aria-label="Your profile">
-            <Avatar name={me.displayName} src={me.avatar} seed="me" size={34} />
-          </Link>
+          <div className="flex items-center gap-1">
+            <ThemeButton />
+            <Link href="/profile" aria-label="Your profile">
+              <Avatar name={me.displayName} src={me.avatar} seed="me" size={34} />
+            </Link>
+          </div>
         </header>
       )}
 

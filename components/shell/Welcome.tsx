@@ -8,6 +8,7 @@ import { addBike, saveMe } from "@/lib/store";
 import { looksLikeText } from "@/lib/text";
 import { BikePicker } from "../BikePicker";
 import { BrandMark, TAGLINE, Wordmark } from "../Brand";
+import { ThemeButton } from "../ThemeToggle";
 import { Button, ChoicePills, ErrorMessage, Field, inputClass, Notice } from "../ui";
 
 const LEVEL_OPTIONS = LEVELS.map((l) => ({ id: l, label: l }));
@@ -84,7 +85,8 @@ export function Welcome() {
       </section>
 
       {/* Sign-up form */}
-      <section className="bg-bg px-5 py-8 sm:px-10 lg:overflow-y-auto lg:py-14">
+      <section className="relative bg-bg px-5 py-8 sm:px-10 lg:overflow-y-auto lg:py-14">
+        <ThemeButton className="absolute right-3 top-3" />
         <form onSubmit={submit} noValidate className="mx-auto max-w-md space-y-6">
           <div>
             <h2 className="font-display text-3xl font-bold uppercase">Create your rider profile</h2>

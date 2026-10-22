@@ -16,7 +16,7 @@ const VARIANTS = {
   secondary: "bg-surface border border-line-strong text-ink hover:bg-surface-2",
   ghost: "text-ink-2 hover:text-ink hover:bg-surface-2",
   danger: "text-danger hover:bg-danger-soft",
-  dark: "bg-ink text-white hover:bg-ink-2",
+  dark: "bg-ink text-on-ink hover:bg-ink-2",
 };
 const SIZES = { sm: "h-9 px-3 text-sm", md: "h-11 px-4 text-sm", lg: "h-12 px-5 text-base" };
 
@@ -174,7 +174,7 @@ export function ChoicePills<T extends string>({
           aria-checked={isOn(o.id)}
           title={o.hint}
           onClick={() => onChange(o.id)}
-          className={`min-h-10 rounded-full border px-3.5 text-sm font-medium transition-colors ${isOn(o.id) ? "border-ink bg-ink text-white" : "border-line-strong bg-surface text-ink-2 hover:border-ink-2"}`}
+          className={`min-h-10 rounded-full border px-3.5 text-sm font-medium transition-colors ${isOn(o.id) ? "border-ink bg-ink text-on-ink" : "border-line-strong bg-surface text-ink-2 hover:border-ink-2"}`}
         >
           {o.label}
         </button>
@@ -287,14 +287,14 @@ export function Toaster() {
       {list.map((t) => (
         <div
           key={t.id}
-          className="pointer-events-auto flex max-w-md items-center gap-2 rounded-full bg-ink px-4 py-2.5 text-sm font-medium text-white shadow-md"
+          className="pointer-events-auto flex max-w-md items-center gap-2 rounded-full bg-ink px-4 py-2.5 text-sm font-medium text-on-ink shadow-md"
         >
           {t.tone === "error" ? (
-            <CircleAlert aria-hidden className="h-4 w-4 text-[#ff8a80]" />
+            <CircleAlert aria-hidden className="h-4 w-4 text-on-ink-accent" />
           ) : t.tone === "info" ? (
-            <Info aria-hidden className="h-4 w-4 text-accent" />
+            <Info aria-hidden className="h-4 w-4 text-on-ink-accent" />
           ) : (
-            <CircleCheck aria-hidden className="h-4 w-4 text-accent" />
+            <CircleCheck aria-hidden className="h-4 w-4 text-on-ink-accent" />
           )}
           {t.text}
         </div>

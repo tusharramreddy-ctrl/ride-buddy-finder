@@ -213,10 +213,10 @@ export function FindPage() {
                     role="radio"
                     aria-checked={style === id}
                     onClick={() => setStyle(id)}
-                    className={`rounded-xl border p-3 text-left transition-colors ${style === id ? "border-ink bg-ink text-white" : "border-line-strong hover:border-ink-2"}`}
+                    className={`rounded-xl border p-3 text-left transition-colors ${style === id ? "border-ink bg-ink text-on-ink" : "border-line-strong hover:border-ink-2"}`}
                   >
                     <span className="block font-semibold">{CHARACTERS[id].name}</span>
-                    <span className={`block text-xs ${style === id ? "text-white/75" : "text-muted"}`}>{CHARACTERS[id].blurb}</span>
+                    <span className={`block text-xs ${style === id ? "text-on-ink/75" : "text-muted"}`}>{CHARACTERS[id].blurb}</span>
                   </button>
                 ))}
               </div>

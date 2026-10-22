@@ -1,5 +1,6 @@
 import type { Metadata, Viewport } from "next";
 import { Barlow_Condensed, Inter } from "next/font/google";
+import { THEME_SCRIPT } from "@/lib/theme-script";
 import "./globals.css";
 
 const body = Inter({ variable: "--font-body", subsets: ["latin"] });
@@ -23,7 +24,12 @@ export const viewport: Viewport = {
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
-    <html lang="en" className={`${body.variable} ${display.variable} h-full antialiased`}>
+    // The theme script sets data-theme before React loads, so the server and
+    // browser HTML differ on purpose for that one attribute.
+    <html lang="en" className={`${body.variable} ${display.variable} h-full antialiased`} suppressHydrationWarning>
+      <head>
+        <script dangerouslySetInnerHTML={{ __html: THEME_SCRIPT }} />
+      </head>
       <body className="min-h-full">{children}</body>
     </html>
   );

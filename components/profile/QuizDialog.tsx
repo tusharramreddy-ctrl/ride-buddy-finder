@@ -68,7 +68,7 @@ function QuizBody({ onDone }: { onDone: (style: CharacterId, answers: number[]) 
             role="radio"
             aria-checked={answers[i] === k}
             onClick={() => (setError(""), setAnswers((a) => a.map((v, j) => (j === i ? k : v))))}
-            className={`rounded-xl border p-3 text-left text-sm transition-colors ${answers[i] === k ? "border-ink bg-ink text-white" : "border-line-strong hover:border-ink-2"}`}
+            className={`rounded-xl border p-3 text-left text-sm transition-colors ${answers[i] === k ? "border-ink bg-ink text-on-ink" : "border-line-strong hover:border-ink-2"}`}
           >
             {o.text}
           </button>
