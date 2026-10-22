@@ -5,24 +5,27 @@ import { CHARACTERS, type CharacterId } from "@/lib/constants";
 import { QUIZ, scoreQuiz } from "@/lib/quiz";
 import { Button, Dialog, ErrorMessage } from "../ui";
 
-// Optional riding-style quiz. Scored by plain code (lib/quiz.ts).
+// Optional riding-style quiz. Scored by plain code (lib/quiz.ts). The result
+// becomes the rider's style; callers save it straight to the profile.
 export function QuizDialog({
   open,
   onClose,
   onDone,
+  doneLabel = "Save to my profile",
 }: {
   open: boolean;
   onClose: () => void;
   onDone: (style: CharacterId, answers: number[]) => void;
+  doneLabel?: string;
 }) {
   return (
     <Dialog open={open} onClose={onClose} title="Riding-style quiz">
-      {open && <QuizBody onDone={onDone} />}
+      {open && <QuizBody onDone={onDone} doneLabel={doneLabel} />}
     </Dialog>
   );
 }
 
-function QuizBody({ onDone }: { onDone: (style: CharacterId, answers: number[]) => void }) {
+function QuizBody({ onDone, doneLabel }: { onDone: (style: CharacterId, answers: number[]) => void; doneLabel: string }) {
   const [answers, setAnswers] = useState<number[]>(() => QUIZ.map(() => -1));
   const [i, setI] = useState(0);
   const [error, setError] = useState("");
@@ -37,7 +40,7 @@ function QuizBody({ onDone }: { onDone: (style: CharacterId, answers: number[]) 
         <p className="mt-1 font-display text-4xl font-extrabold uppercase">{c.name}</p>
         <p className="mx-auto mt-2 max-w-sm text-ink-2">{c.blurb}</p>
         <Button className="mt-5" onClick={() => onDone(result, answers)}>
-          Save to my profile
+          {doneLabel}
         </Button>
       </div>
     );

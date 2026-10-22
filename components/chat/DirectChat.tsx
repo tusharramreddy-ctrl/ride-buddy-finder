@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
-import { Ban, Flag, Trash, UserRound } from "lucide-react";
+import { Ban, Flag, Sparkles, Trash, UserRound } from "lucide-react";
 import { isCloud } from "@/lib/people";
 import { blockRider, deleteConversation, loadProfile, sendDirectMessage, unblockRider, useStore } from "@/lib/store";
 import { Avatar, Button, DemoBadge, Notice, Spinner, toast } from "../ui";
@@ -11,12 +11,13 @@ import { ChatHeader, ChatMenu, ChatNotFound, ConfirmDialog, type MenuItem } from
 import { partnerFor } from "./chat-utils";
 import { Composer } from "./Composer";
 import { MessageList } from "./MessageList";
+import { PlanRideDialog } from "./PlanRideDialog";
 import { ReportDialog } from "./ReportDialog";
 
 export function DirectChat({ partnerId, draft }: { partnerId: string; draft: string }) {
   const { state } = useStore();
   const router = useRouter();
-  const [dialog, setDialog] = useState<"block" | "report" | "delete" | null>(null);
+  const [dialog, setDialog] = useState<"block" | "report" | "delete" | "plan" | null>(null);
   const partner = partnerFor(partnerId, state);
   const cloud = isCloud(state);
 
@@ -60,7 +61,19 @@ export function DirectChat({ partnerId, draft }: { partnerId: string; draft: str
 
   return (
     <>
-      <ChatHeader actions={<ChatMenu label={`More options for ${partner.name}`} items={menu} />}>
+      <ChatHeader
+        actions={
+          <>
+            {!blocked && (
+              <Button variant="secondary" size="sm" onClick={() => setDialog("plan")}>
+                <Sparkles className="h-4 w-4" /> <span className="hidden sm:inline">Plan a ride</span>
+                <span className="sr-only sm:hidden">Plan a ride</span>
+              </Button>
+            )}
+            <ChatMenu label={`More options for ${partner.name}`} items={menu} />
+          </>
+        }
+      >
         <Link href={`/riders/${partner.id}`} className="flex min-w-0 items-center gap-3 rounded-xl py-1 pr-2 hover:bg-surface-2">
           <Avatar name={partner.name} src={partner.avatar} seed={partner.id} size={40} />
           <span className="min-w-0">
@@ -152,6 +165,7 @@ export function DirectChat({ partnerId, draft }: { partnerId: string; draft: str
           toast("Your messages were deleted");
         }}
       />
+      <PlanRideDialog open={dialog === "plan"} onClose={() => setDialog(null)} partner={partner} />
       <ReportDialog open={dialog === "report"} onClose={() => setDialog(null)} targetType="rider" targetId={partner.id} subject={partner.name} />
     </>
   );

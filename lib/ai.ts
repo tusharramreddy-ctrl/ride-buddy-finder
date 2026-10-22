@@ -3,6 +3,7 @@ import { z } from "zod";
 import { AREAS, BIKE_TYPES, CHARACTER_IDS, CHARACTERS, LEVELS, SLOT_IDS, slotLabel } from "./constants";
 import { inCommon } from "./filters";
 import type { AiPick } from "./matching";
+import { SLOT_WINDOWS, type PlanBasics, type PlanChoice, type PlanRider } from "./plan";
 import { prefsBikeLabel, prefsBikeType, type MatchPrefs } from "./prefs";
 import { riderBike, type DemoRider } from "./riders";
 
@@ -214,7 +215,69 @@ export async function draftIntro(profile: MatchPrefs, rider: DemoRider): Promise
   return result.message.trim();
 }
 
-// ---- 4. Read a rider's sentence into structured preferences ----
+// ---- 4. Plan a ride for two riders ----
+// Code has already chosen the time slot, pace, distance limit and the list of
+// allowed destinations. The AI picks from that list and writes the summary;
+// buildPlan (lib/plan.ts) replaces anything outside the rules.
+
+const planSchema = z.object({
+  destinationId: z.string(),
+  backupId: z.string().nullable(),
+  startTime: z.string(),
+  summary: z.string().min(20).max(600),
+  stops: z.string().max(300),
+});
+
+function describePlanRider(r: PlanRider) {
+  return {
+    name: r.name,
+    level: r.level,
+    ridingStyle: r.style ? CHARACTERS[r.style].name : "not set",
+    preferredPace: r.style ? CHARACTERS[r.style].pace : "not set",
+    bikeType: r.bikeType ?? "not given",
+    area: r.area ?? "not given",
+  };
+}
+
+export async function planRide(a: PlanRider, b: PlanRider, basics: PlanBasics): Promise<PlanChoice> {
+  const window = SLOT_WINDOWS[basics.slot];
+  return askForJson({
+    system:
+      "You plan a day ride for two motorcycle riders in Bengaluru who want to ride together. " +
+      "The app has already fixed the time slot, the pace and the allowed destinations. " +
+      "Choose destinationId (and a different backupId) ONLY from the destinations list, the one that best suits BOTH riders' styles. " +
+      "startTime: 24-hour HH:MM inside the time window. " +
+      "summary: 2–3 friendly sentences (max 60 words) on why this ride suits the two of them, using only the facts given. " +
+      "Call the riders by first name (never \"both riders\"), and write any time the way people say it, like 7 am. " +
+      "Don't mention the app's limits or rules (such as the maximum distance). " +
+      "stops: one short sentence on the kind of stops to make (e.g. a breakfast or chai stop, a photo stop); do NOT name any café, shop or business. " +
+      "Never invent places, distances or road details beyond the list, and never comment on anyone's safety, skill or trustworthiness. " +
+      DATA_NOTE,
+    prompt: JSON.stringify({
+      riders: [describePlanRider(a), describePlanRider(b)],
+      timeSlot: slotLabel(basics.slot),
+      timeWindow: { from: window.from, to: window.to },
+      pace: basics.pace,
+      maxKmEachWay: basics.maxKm,
+      meetingArea: basics.meetArea,
+      destinations: basics.candidates.map((d) => ({ id: d.id, name: d.name, kmEachWay: d.km, road: d.road, suitsStyles: d.styles.map((s) => CHARACTERS[s].name) })),
+    }),
+    jsonSchema: strictObject({
+      destinationId: { type: "string", enum: basics.candidates.map((d) => d.id) },
+      backupId: { anyOf: [{ type: "string", enum: basics.candidates.map((d) => d.id) }, { type: "null" }] },
+      startTime: { type: "string" },
+      summary: { type: "string" },
+      stops: { type: "string" },
+    }),
+    zodSchema: planSchema,
+    totalMs: 15000,
+    attempts: 2,
+    effort: "minimal",
+    fast: true,
+  });
+}
+
+// ---- 5. Read a rider's sentence into structured preferences ----
 // The AI only fills fields it can find in the text and leaves the rest null.
 // Code then checks every value against the allowed lists, and the rider
 // reviews and corrects everything before matching.

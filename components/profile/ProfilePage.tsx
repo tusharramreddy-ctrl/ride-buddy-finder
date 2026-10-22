@@ -2,17 +2,18 @@
 
 import Link from "next/link";
 import { useState } from "react";
-import { Bike, Gauge, LogOut, MapPin, Pencil, Route, Timer } from "lucide-react";
+import { Bike, Gauge, LogOut, MapPin, Pencil, Route, Sparkles, Timer } from "lucide-react";
 import { bikeInfo } from "@/lib/bikes";
 import { CHARACTERS, GENDERS } from "@/lib/constants";
 import { formatDuration, formatKm } from "@/lib/geo";
 import { ME } from "@/lib/model";
-import { signOut, useStore } from "@/lib/store";
+import { saveQuizResult, signOut, useStore } from "@/lib/store";
 import { PostCard } from "../home/PostCard";
 import { RoutePreview } from "../RoutePreview";
 import { openComposer } from "../shell/composer-state";
-import { Avatar, Button, Card, Chip, EmptyState, Tabs } from "../ui";
+import { Avatar, Button, Card, Chip, EmptyState, Tabs, toast } from "../ui";
 import { EditProfileDialog } from "./EditProfileDialog";
+import { QuizDialog } from "./QuizDialog";
 import { Garage } from "./Garage";
 
 type Tab = "posts" | "rides" | "bikes";
@@ -22,6 +23,7 @@ export function ProfilePage() {
   const me = state.me!;
   const [tab, setTab] = useState<Tab>("posts");
   const [editOpen, setEditOpen] = useState(false);
+  const [quizOpen, setQuizOpen] = useState(false);
 
   const primary = state.garage.find((b) => b.primary);
   const myPosts = state.posts.filter((p) => p.authorId === ME);
@@ -67,7 +69,14 @@ export function ProfilePage() {
           )}
           <div className="mt-3 flex flex-wrap gap-1.5">
             <Chip tone="accent">{me.level}</Chip>
-            <Chip>{me.style ? CHARACTERS[me.style].name : "Riding style not set"}</Chip>
+            {me.style && <Chip>{CHARACTERS[me.style].name}</Chip>}
+            <button
+              type="button"
+              onClick={() => setQuizOpen(true)}
+              className="inline-flex items-center gap-1 rounded-full border border-dashed border-line-strong px-2.5 py-1 text-xs font-semibold text-accent-ink hover:bg-surface-2"
+            >
+              <Sparkles className="h-3.5 w-3.5" /> {me.style ? "Retake style quiz" : "Find your riding style"}
+            </button>
             {primary && (
               <Chip>
                 <Bike className="h-3.5 w-3.5" /> {bikeInfo(primary.bike).label}
@@ -181,6 +190,15 @@ export function ProfilePage() {
       </p>
 
       <EditProfileDialog open={editOpen} onClose={() => setEditOpen(false)} me={me} />
+      <QuizDialog
+        open={quizOpen}
+        onClose={() => setQuizOpen(false)}
+        onDone={async (style, answers) => {
+          setQuizOpen(false);
+          const error = await saveQuizResult(style, answers);
+          toast(error ?? `Riding style saved: ${CHARACTERS[style].name}`, error ? "error" : "success");
+        }}
+      />
     </div>
   );
 }

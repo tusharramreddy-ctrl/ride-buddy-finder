@@ -7,8 +7,9 @@ import { AREAS, CHARACTER_IDS, CHARACTERS, GENDERS, LEVELS, SLOTS, slotLabel, ty
 import type { BikeRef } from "@/lib/bikes";
 import { parseMatchPrefs, type MatchPrefs } from "@/lib/prefs";
 import { findRider, riderBike } from "@/lib/riders";
-import { useStore } from "@/lib/store";
+import { saveQuizResult, useStore } from "@/lib/store";
 import { BikePicker } from "../BikePicker";
+import { QuizDialog } from "../profile/QuizDialog";
 import { Avatar, Button, Card, ChoicePills, DemoBadge, ErrorMessage, Field, inputClass, Notice, postJson, toast } from "../ui";
 
 type Step = "describe" | "review" | "results";
@@ -43,6 +44,9 @@ export function FindPage() {
   const [area, setArea] = useState<Area | "">(me.region ?? "");
   const [availability, setAvailability] = useState<SlotId[]>(me.availability);
   const [style, setStyle] = useState<CharacterId | null>(me.style);
+  // A style from the quiz is kept: the sentence never overrides it.
+  const [styleFromQuiz, setStyleFromQuiz] = useState(!!me.style && !!me.quizAnswers);
+  const [quizOpen, setQuizOpen] = useState(false);
   const [bike, setBike] = useState<BikeRef | null>(primary);
   const [womenOnly, setWomenOnly] = useState(false);
   const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({});
@@ -81,7 +85,7 @@ export function FindPage() {
       setAvailability(s.availability);
       filled.add("availability");
     }
-    if (s.style) {
+    if (s.style && !styleFromQuiz) {
       setStyle(s.style);
       filled.add("style");
     }
@@ -204,7 +208,17 @@ export function FindPage() {
             </Field>
 
             <div>
-              <p className="mb-2 text-sm font-semibold">Riding style {tag("style")}</p>
+              <div className="mb-2 flex flex-wrap items-center justify-between gap-2">
+                <p className="text-sm font-semibold">
+                  Riding style {tag("style")}
+                  {styleFromQuiz && (
+                    <span className="ml-2 rounded-full bg-accent-soft px-2 py-0.5 text-[11px] font-semibold text-accent-ink">From your quiz</span>
+                  )}
+                </p>
+                <Button variant="ghost" size="sm" onClick={() => setQuizOpen(true)}>
+                  <Sparkles className="h-4 w-4" /> {styleFromQuiz ? "Retake the quiz" : "Not sure? Take the quiz"}
+                </Button>
+              </div>
               <div className="grid gap-2 sm:grid-cols-2" role="radiogroup" aria-label="Riding style">
                 {CHARACTER_IDS.map((id) => (
                   <button
@@ -212,7 +226,7 @@ export function FindPage() {
                     type="button"
                     role="radio"
                     aria-checked={style === id}
-                    onClick={() => setStyle(id)}
+                    onClick={() => (setStyle(id), setStyleFromQuiz(false))}
                     className={`rounded-xl border p-3 text-left transition-colors ${style === id ? "border-ink bg-ink text-on-ink" : "border-line-strong hover:border-ink-2"}`}
                   >
                     <span className="block font-semibold">{CHARACTERS[id].name}</span>
@@ -284,6 +298,19 @@ export function FindPage() {
           <Results results={results} note={note} prefs={usedPrefs} onBack={() => setStep("review")} onRetry={findRiders} retrying={finding} />
         )}
       </div>
+
+      <QuizDialog
+        open={quizOpen}
+        onClose={() => setQuizOpen(false)}
+        onDone={async (s, answers) => {
+          setQuizOpen(false);
+          setStyle(s);
+          setStyleFromQuiz(true);
+          setFromText((f) => new Set([...f].filter((k) => k !== "style")));
+          const error = await saveQuizResult(s, answers);
+          toast(error ?? `Riding style saved: ${CHARACTERS[s].name}`, error ? "error" : "success");
+        }}
+      />
     </div>
   );
 }

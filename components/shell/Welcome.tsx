@@ -2,8 +2,8 @@
 
 import Link from "next/link";
 import { useState, type ReactNode } from "react";
-import { Mail, MessageCircle, Route, Users } from "lucide-react";
-import { AREAS, GENDERS, LEVELS, SLOTS, type Area, type Gender, type Level, type SlotId } from "@/lib/constants";
+import { Mail, MessageCircle, Route, Sparkles, Users } from "lucide-react";
+import { AREAS, CHARACTERS, GENDERS, LEVELS, SLOTS, type Area, type CharacterId, type Gender, type Level, type SlotId } from "@/lib/constants";
 import type { BikeRef } from "@/lib/bikes";
 import { isCloud } from "@/lib/people";
 import {
@@ -20,6 +20,7 @@ import {
 import { looksLikeText } from "@/lib/text";
 import { BikePicker } from "../BikePicker";
 import { BrandMark, TAGLINE, Wordmark } from "../Brand";
+import { QuizDialog } from "../profile/QuizDialog";
 import { ThemeButton } from "../ThemeToggle";
 import { Button, ChoicePills, ErrorMessage, Field, inputClass, Notice } from "../ui";
 
@@ -186,6 +187,8 @@ export function Welcome() {
   const [availability, setAvailability] = useState<SlotId[]>(prefill?.availability ?? []);
   const [gender, setGender] = useState<Gender | "">(prefill?.gender ?? "");
   const [bike, setBike] = useState<BikeRef | null>(null);
+  const [quiz, setQuiz] = useState<{ style: CharacterId; answers: number[] } | null>(null);
+  const [quizOpen, setQuizOpen] = useState(false);
   const [importDevice, setImportDevice] = useState(!!device);
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [saving, setSaving] = useState(false);
@@ -209,8 +212,9 @@ export function Welcome() {
       bio: importDevice && prefill ? prefill.bio : "",
       region: area || null,
       level: level!,
-      style: importDevice && prefill ? prefill.style : null,
-      quizAnswers: importDevice && prefill ? prefill.quizAnswers : null,
+      // A quiz taken here wins over a style brought over from this device.
+      style: quiz?.style ?? (importDevice && prefill ? prefill.style : null),
+      quizAnswers: quiz?.answers ?? (importDevice && prefill ? prefill.quizAnswers : null),
       gender: gender || null,
       showGender: importDevice && prefill ? prefill.showGender : false,
       availability,
@@ -302,6 +306,26 @@ export function Welcome() {
           />
         </Field>
 
+        <div>
+          <p className="mb-2 text-sm font-semibold">Riding style (optional)</p>
+          {quiz ? (
+            <div className="flex flex-wrap items-center gap-3 rounded-xl border border-accent bg-accent-soft p-3">
+              <span className="min-w-0 flex-1">
+                <span className="block font-semibold">{CHARACTERS[quiz.style].name}</span>
+                <span className="block text-xs text-ink-2">{CHARACTERS[quiz.style].blurb}</span>
+              </span>
+              <Button variant="ghost" size="sm" onClick={() => setQuizOpen(true)}>
+                Retake
+              </Button>
+            </div>
+          ) : (
+            <Button variant="secondary" onClick={() => setQuizOpen(true)}>
+              <Sparkles className="h-4 w-4" /> Take the 7-question quiz
+            </Button>
+          )}
+          <p className="mt-1.5 text-xs text-muted">Your result becomes your riding style, used to match you with riders.</p>
+        </div>
+
         <Field label="Rough area (optional)" htmlFor="w-area" hint="Only an approximate area. We never ask for your exact address.">
           <select id="w-area" className={inputClass} value={area} onChange={(e) => setArea(e.target.value as Area | "")}>
             <option value="">Prefer not to say</option>
@@ -335,6 +359,15 @@ export function Welcome() {
           {saving ? "Setting up your profile…" : "Start riding with Ride Buddy"}
         </Button>
       </form>
+      <QuizDialog
+        open={quizOpen}
+        onClose={() => setQuizOpen(false)}
+        doneLabel="Use this style"
+        onDone={(style, answers) => {
+          setQuiz({ style, answers });
+          setQuizOpen(false);
+        }}
+      />
     </AuthLayout>
   );
 }

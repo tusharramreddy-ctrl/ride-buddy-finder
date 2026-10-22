@@ -19,6 +19,12 @@ export function gmapsAreaUrl(area: string): string {
   return gmapsSearchUrl(`${area}, Bengaluru`);
 }
 
+// Directions between two places by name, e.g. an area and a destination.
+export function gmapsDirectionsUrl(from: string, to: string): string {
+  const params = new URLSearchParams({ api: "1", origin: from, destination: to, travelmode: "driving" });
+  return `${BASE}/dir/?${params.toString()}`;
+}
+
 // A single point, e.g. the centre of the map view.
 export function gmapsPointUrl(point: LngLat, zoom?: number): string {
   const z = zoom ? `&zoom=${Math.max(3, Math.min(21, Math.round(zoom)))}` : "";

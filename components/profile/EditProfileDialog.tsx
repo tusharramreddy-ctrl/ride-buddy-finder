@@ -6,7 +6,7 @@ import { AREAS, CHARACTER_IDS, CHARACTERS, GENDERS, LEVELS, SLOTS, type Area, ty
 import { compressImage } from "@/lib/image";
 import type { MeProfile } from "@/lib/model";
 import { isCloud } from "@/lib/people";
-import { resetEverything, saveMe, useStore } from "@/lib/store";
+import { resetEverything, saveMe, saveQuizResult, useStore } from "@/lib/store";
 import { looksLikeText } from "@/lib/text";
 import { Avatar, Button, ChoicePills, Dialog, ErrorMessage, Field, inputClass, toast } from "../ui";
 import { QuizDialog } from "./QuizDialog";
@@ -193,10 +193,13 @@ function EditForm({ me, onClose }: { me: MeProfile; onClose: () => void }) {
       <QuizDialog
         open={quizOpen}
         onClose={() => setQuizOpen(false)}
-        onDone={(s, answers) => {
+        onDone={async (s, answers) => {
           setStyle(s);
           setQuizAnswers(answers);
           setQuizOpen(false);
+          const error = await saveQuizResult(s, answers);
+          if (error) setErrors({ form: error });
+          else toast(`Riding style saved: ${CHARACTERS[s].name}`);
         }}
       />
 

@@ -2,6 +2,7 @@
 
 import { useSyncExternalStore } from "react";
 import * as cloud from "./cloud";
+import type { CharacterId } from "./constants";
 import {
   emptyState,
   isUuid,
@@ -307,6 +308,13 @@ export async function saveMe(me: MeProfile): Promise<string | null> {
     if (/duplicate|unique/i.test(msg)) return "That username is already taken. Please choose another.";
     return "We couldn't save your profile. Please check your connection and try again.";
   }
+}
+
+// The quiz result goes straight onto the profile, so nobody has to pick a
+// style by hand after taking it.
+export async function saveQuizResult(style: CharacterId, answers: number[]): Promise<string | null> {
+  if (!state.me) return "Set up your profile first.";
+  return saveMe({ ...state.me, style, quizAnswers: answers });
 }
 
 export function addBike(bike: Omit<GarageBike, "id" | "addedAt" | "primary">, makePrimary: boolean): string {
