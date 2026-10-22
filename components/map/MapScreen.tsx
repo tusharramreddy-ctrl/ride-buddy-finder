@@ -1,7 +1,8 @@
 "use client";
 
 import { useMemo, useState } from "react";
-import { ListOrdered } from "lucide-react";
+import { ExternalLink, ListOrdered } from "lucide-react";
+import { gmapsPointUrl } from "@/lib/gmaps";
 import type { LngLat, Ride } from "@/lib/model";
 import { segments, toRide } from "@/lib/ride-tracker";
 import { deleteRide, saveRide, useStore } from "@/lib/store";
@@ -28,6 +29,7 @@ export function MapScreen() {
   const [confirm, setConfirm] = useState<Confirm>(null);
   const [selectedId, setSelectedId] = useState<string | null>(null);
   const [savedId, setSavedId] = useState<string | null>(null);
+  const [view, setView] = useState<{ center: LngLat; zoom: number } | null>(null);
 
   const savedRide = savedId ? (state.rides.find((r) => r.id === savedId) ?? null) : null;
   const selectedRide = selectedId ? (state.rides.find((r) => r.id === selectedId) ?? null) : null;
@@ -95,18 +97,33 @@ export function MapScreen() {
           showFollowToggle={active && !!position}
           onLocate={canLocate ? locate : null}
           centerNonce={centerNonce}
+          onViewChange={(center, zoom) => setView({ center, zoom })}
         />
 
         {!inRide && !historyOpen && (
-          <button
-            type="button"
-            onClick={() => setHistoryOpen(true)}
-            className="absolute left-3 top-3 z-10 inline-flex min-h-11 items-center gap-2 rounded-full bg-asphalt-2/95 px-4 text-sm font-semibold text-on-asphalt shadow-md ring-1 ring-asphalt-line hover:bg-asphalt-line lg:left-auto lg:right-14"
-          >
-            <ListOrdered aria-hidden className="h-4 w-4 text-accent" />
-            Your rides
-            <span className="rounded-full bg-asphalt-line px-1.5 text-xs tabular-nums">{state.rides.length}</span>
-          </button>
+          <div className="absolute left-3 top-3 z-10 flex flex-col items-start gap-2 lg:left-auto lg:right-14 lg:items-end">
+            <button
+              type="button"
+              onClick={() => setHistoryOpen(true)}
+              className="inline-flex min-h-11 items-center gap-2 rounded-full bg-asphalt-2/95 px-4 text-sm font-semibold text-on-asphalt shadow-md ring-1 ring-asphalt-line hover:bg-asphalt-line"
+            >
+              <ListOrdered aria-hidden className="h-4 w-4 text-accent" />
+              Your rides
+              <span className="rounded-full bg-asphalt-line px-1.5 text-xs tabular-nums">{state.rides.length}</span>
+            </button>
+            {view && (
+              <a
+                href={gmapsPointUrl(view.center, view.zoom)}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex min-h-11 items-center gap-2 rounded-full bg-asphalt-2/95 px-4 text-sm font-semibold text-on-asphalt shadow-md ring-1 ring-asphalt-line hover:bg-asphalt-line"
+              >
+                <ExternalLink aria-hidden className="h-4 w-4 text-accent" />
+                Open in Google Maps
+                <span className="sr-only"> (shows this map area in Google Maps, in a new tab)</span>
+              </a>
+            )}
+          </div>
         )}
 
         {historyOpen && (

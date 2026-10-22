@@ -6,9 +6,11 @@ import { CalendarDays, Ellipsis, EyeOff, Flag, Heart, MapPin, MessageSquare, Pen
 import { bikeInfo } from "@/lib/bikes";
 import { DEMO_COMMENTS } from "@/lib/demo";
 import { formatMinutes } from "@/lib/geo";
+import { gmapsAreaUrl, gmapsRouteUrl } from "@/lib/gmaps";
 import { ME, POST_KINDS, type Comment, type Post } from "@/lib/model";
 import { isCloud, personFor } from "@/lib/people";
 import { addComment, deleteComment, deletePost, hidePost, report, toggleLike, useStore } from "@/lib/store";
+import { GoogleMapsLink } from "../GoogleMapsLink";
 import { RoutePreview } from "../RoutePreview";
 import { openComposer } from "../shell/composer-state";
 import { Avatar, Button, Card, Chip, DemoBadge, Dialog, IconButton, timeAgo, toast } from "../ui";
@@ -127,7 +129,12 @@ export function PostCard({ post }: { post: Post }) {
             ) : (
               <p className="border-t border-line bg-surface-2 px-4 py-2 text-xs text-muted">Distance and time entered by the rider. No GPS route.</p>
             )}
-            {post.demo && post.ride!.route && <p className="border-t border-line bg-surface-2 px-4 py-1.5 text-[11px] text-muted">Demo route for illustration</p>}
+            {post.ride!.route && (
+              <div className="flex flex-wrap items-center justify-between gap-2 border-t border-line bg-surface-2 px-4 py-1.5">
+                <span className="text-[11px] text-muted">{post.demo ? "Demo route for illustration" : "Start and end hidden for privacy"}</span>
+                <GoogleMapsLink href={gmapsRouteUrl(post.ride!.route)!} label="Open route in Google Maps" />
+              </div>
+            )}
           </div>
         )}
 
@@ -141,6 +148,7 @@ export function PostCard({ post }: { post: Post }) {
                 <MapPin className="h-3.5 w-3.5" /> {post.plan.area}
               </Chip>
             )}
+            {post.plan.area && <GoogleMapsLink href={gmapsAreaUrl(post.plan.area)} label="Open in Google Maps" />}
           </div>
         )}
 

@@ -1,7 +1,8 @@
 "use client";
 
 import { useEffect, useRef } from "react";
-import { PenLine, Plus, Route, Share2, Trash, X } from "lucide-react";
+import { ExternalLink, PenLine, Plus, Route, Share2, Trash, X } from "lucide-react";
+import { gmapsRouteUrl } from "@/lib/gmaps";
 import { avgSpeedKmh, formatDuration, formatKm } from "@/lib/geo";
 import type { GarageBike, Ride } from "@/lib/model";
 import { RoutePreview } from "../RoutePreview";
@@ -116,7 +117,18 @@ export function RideHistory({
                         Shared
                       </span>
                     )}
-                    <span className="ml-auto flex gap-1">
+                    <span className="ml-auto flex items-center gap-1">
+                      {gps && ride.points.length > 1 && (
+                        <a
+                          href={gmapsRouteUrl(ride.points.map((p) => [p.lng, p.lat]))!}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="inline-flex min-h-11 items-center gap-1.5 rounded-full px-3 text-sm font-semibold text-on-asphalt hover:bg-asphalt-line"
+                        >
+                          <ExternalLink aria-hidden className="h-4 w-4" /> Google Maps
+                          <span className="sr-only"> (opens this ride in Google Maps in a new tab)</span>
+                        </a>
+                      )}
                       {!ride.sharedPostId && (
                         <button
                           type="button"

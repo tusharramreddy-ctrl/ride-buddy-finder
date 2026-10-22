@@ -34,6 +34,7 @@ type Props = {
   showFollowToggle: boolean;
   onLocate: (() => void) | null; // null hides the "locate me" button
   centerNonce: number; // bump to centre on `position` once it's available
+  onViewChange?: (center: LngLat, zoom: number) => void; // reports where the map is looking
 };
 
 type LoadState = { kind: "loading" } | { kind: "ready" } | { kind: "error"; message: string };
@@ -133,8 +134,15 @@ export function RideMap(props: Props) {
       else if (!disposed) setTileWarning(true);
     });
 
+    const reportView = () => {
+      const c = map.getCenter();
+      propsRef.current.onViewChange?.([c.lng, c.lat], map.getZoom());
+    };
+    map.on("moveend", reportView);
+
     map.on("load", () => {
       if (disposed) return;
+      reportView();
       const p = propsRef.current;
       map.addSource(ROUTE_SRC, { type: "geojson", data: routeData(p.routes) });
       map.addSource(ENDS_SRC, { type: "geojson", data: endsData(p.routes) });
