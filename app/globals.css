@@ -134,6 +134,28 @@ body {
   outline-offset: 2px;
 }
 
+/* Message pop-ups: slide in, and the timer bar empties (duration set inline). */
+@keyframes message-alert-in {
+  from {
+    opacity: 0;
+    transform: translateY(-8px);
+  }
+}
+@keyframes alert-timer-drain {
+  to {
+    transform: scaleX(0);
+  }
+}
+.message-alert {
+  animation: message-alert-in 180ms ease-out;
+}
+.alert-timer {
+  transform-origin: left;
+  animation-name: alert-timer-drain;
+  animation-timing-function: linear;
+  animation-fill-mode: forwards;
+}
+
 /* MapLibre: keep attribution readable on the dark map surface. */
 .maplibregl-ctrl-attrib {
   font-size: 11px;

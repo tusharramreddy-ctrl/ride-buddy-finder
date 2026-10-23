@@ -1,6 +1,7 @@
 "use client";
 
 import { useSyncExternalStore } from "react";
+import { showMessageAlert } from "./alerts";
 import * as cloud from "./cloud";
 import type { CharacterId } from "./constants";
 import {
@@ -209,11 +210,17 @@ function startLive(userId: string) {
       state = { ...state, conversations: cloud.addDm(state.conversations, row, userId) };
       ensureProfiles([row.sender_id, row.recipient_id ?? ""].filter((x) => x && x !== userId));
       emit();
+      if (row.recipient_id === userId && row.sender_id !== userId && !state.blocked.includes(row.sender_id)) {
+        showMessageAlert({ id: row.id, fromId: row.sender_id, groupId: null, text: row.body, href: `/chat/dm-${row.sender_id}` });
+      }
     },
     groupMessage: (row) => {
       state = { ...state, groupMessages: cloud.addGroupMessage(state.groupMessages, row, userId) };
       ensureProfiles([row.sender_id].filter((x) => x !== userId));
       emit();
+      if (row.sender_id !== userId && state.joinedGroups.includes(row.group_id) && !state.blocked.includes(row.sender_id)) {
+        showMessageAlert({ id: row.id, fromId: row.sender_id, groupId: row.group_id, text: row.body, href: `/chat/g-${row.group_id}` });
+      }
     },
     post: (event, row) => {
       if (event === "DELETE") state = { ...state, posts: state.posts.filter((p) => p.id !== row.id) };

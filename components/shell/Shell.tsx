@@ -11,6 +11,7 @@ import { Avatar, Button, ErrorMessage, Spinner, Toaster } from "../ui";
 import { ComposerDialog } from "../home/Composer";
 import { SignIn, Welcome } from "./Welcome";
 import { openComposer } from "./composer-state";
+import { MessageAlerts } from "./MessageAlerts";
 
 const NAV = [
   { href: "/", label: "Home", icon: House, match: (p: string) => p === "/" || p.startsWith("/find") || p.startsWith("/riders") },
@@ -162,6 +163,7 @@ export function Shell({ children }: { children: ReactNode }) {
 
       <ComposerDialog />
       <Toaster />
+      <MessageAlerts />
     </div>
   );
 }
