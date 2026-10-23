@@ -1,10 +1,10 @@
 "use client";
 
 import Link from "next/link";
-import { useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { ArrowLeft, Copy, MessageCircle, PencilLine, RefreshCw, Sparkles, UserRound } from "lucide-react";
 import { AREAS, CHARACTER_IDS, CHARACTERS, GENDERS, LEVELS, SLOTS, slotLabel, type Area, type CharacterId, type Level, type SlotId } from "@/lib/constants";
-import type { BikeRef } from "@/lib/bikes";
+import { bikeInfo, type BikeRef } from "@/lib/bikes";
 import { parseMatchPrefs, type MatchPrefs } from "@/lib/prefs";
 import { findRider, riderBike } from "@/lib/riders";
 import { saveQuizResult, useStore } from "@/lib/store";
@@ -56,6 +56,35 @@ export function FindPage() {
   const [results, setResults] = useState<MatchResult[]>([]);
   const [note, setNote] = useState("");
   const [usedPrefs, setUsedPrefs] = useState<MatchPrefs | null>(null);
+
+  // The AI drafts the "how I ride" sentence from the profile, so the rider
+  // doesn't have to type it. They can edit it, redraft it or write their own.
+  const [drafting, setDrafting] = useState(false);
+  const [drafted, setDrafted] = useState<"ai" | "code" | null>(null);
+
+  const draftFromProfile = useCallback(async () => {
+    setDrafting(true);
+    setDescribeError("");
+    const res = await postJson<{ text: string; source: "ai" | "code" }>("/api/describe", {
+      level: me.level,
+      style: me.style,
+      area: me.region,
+      availability: me.availability,
+      bike: primary ? bikeInfo(primary).label : null,
+      bio: me.bio,
+    });
+    setDrafting(false);
+    if (!res.ok) return; // The rider can still type their own.
+    setText(res.data.text);
+    setDrafted(res.data.source);
+  }, [me, primary]);
+
+  const draftedOnce = useRef(false);
+  useEffect(() => {
+    if (draftedOnce.current) return;
+    draftedOnce.current = true;
+    void draftFromProfile();
+  }, [draftFromProfile]);
 
   async function readDescription() {
     setDescribeError("");
@@ -162,21 +191,38 @@ export function FindPage() {
       <div className="mt-6 space-y-5">
         {step === "describe" && (
           <Card className="space-y-4 p-5">
-            <Field label="Describe how you ride, in a sentence or two" htmlFor="describe">
+            <Field label="How you ride" htmlFor="describe">
               <textarea
                 id="describe"
                 rows={4}
                 maxLength={600}
                 value={text}
-                onChange={(e) => setText(e.target.value)}
-                placeholder={EXAMPLE}
+                disabled={drafting}
+                onChange={(e) => (setText(e.target.value), setDrafted(null))}
+                placeholder={drafting ? "Drafting from your profile…" : EXAMPLE}
                 className={`${inputClass} resize-y leading-relaxed`}
               />
             </Field>
-            <p className="text-xs text-muted">
-              Mention your bike, experience, preferred pace, ride type, when you&apos;re free and roughly where you are. You&apos;ll
-              review everything before we search.
-            </p>
+            <div className="flex flex-wrap items-center gap-2">
+              <p className="flex-1 text-xs text-muted">
+                {drafting
+                  ? "Writing a description from your profile…"
+                  : drafted === "ai"
+                    ? "AI drafted this from your profile. Edit it, or write your own."
+                    : drafted === "code"
+                      ? "Drafted from your profile. Edit it, or write your own."
+                      : "Mention your bike, experience, pace, ride type, when you're free and roughly where you are."}{" "}
+                You&apos;ll review everything before we search.
+              </p>
+              <Button variant="ghost" size="sm" onClick={() => void draftFromProfile()} loading={drafting}>
+                <RefreshCw className="h-4 w-4" /> {drafted ? "Redraft" : "Draft from my profile"}
+              </Button>
+              {text && !drafting && (
+                <Button variant="ghost" size="sm" onClick={() => (setText(""), setDrafted(null), document.getElementById("describe")?.focus())}>
+                  <PencilLine className="h-4 w-4" /> Write my own
+                </Button>
+              )}
+            </div>
             <ErrorMessage>{describeError}</ErrorMessage>
             <div className="flex flex-col gap-2 sm:flex-row">
               <Button onClick={readDescription} loading={reading} size="lg">

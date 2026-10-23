@@ -38,26 +38,20 @@ export function HomePage() {
         </header>
 
         {/* Find riding buddies: the heart of Ride Buddy */}
-        <section className="relative overflow-hidden rounded-2xl bg-asphalt p-5 text-on-asphalt sm:p-6">
-          <div className="relative z-10 max-w-md">
-            <p className="flex items-center gap-2 text-sm font-semibold text-accent">
-              <Sparkles className="h-4 w-4" /> Rider matching
-            </p>
-            <h2 className="mt-1 font-display text-3xl font-bold uppercase leading-tight">Find riding buddies</h2>
-            <p className="mt-1 text-sm text-on-asphalt-muted">
-              Describe how you ride in a sentence. We&apos;ll suggest three compatible riders and help you write a first message.
-            </p>
-            <Link
-              href="/find"
-              className="mt-4 inline-flex h-11 items-center gap-2 rounded-full bg-accent px-5 text-sm font-semibold text-on-accent hover:bg-accent-hover"
-            >
-              Find my riders <ArrowRight className="h-4 w-4" />
-            </Link>
+        <section className="flex flex-col gap-3 rounded-2xl bg-asphalt px-4 py-3 text-on-asphalt sm:flex-row sm:items-center">
+          <Sparkles aria-hidden className="hidden h-5 w-5 shrink-0 text-accent sm:block" />
+          <div className="min-w-0 flex-1">
+            <h2 className="flex items-center gap-2 font-semibold">
+              <Sparkles aria-hidden className="h-4 w-4 text-accent sm:hidden" /> Find riding buddies
+            </h2>
+            <p className="text-sm text-on-asphalt-muted">3 matched riders, drafted from your profile</p>
           </div>
-          <svg aria-hidden viewBox="0 0 200 120" className="absolute -right-6 bottom-0 h-full w-1/2 opacity-70">
-            <path d="M10 120 C 60 100, 70 60, 110 55 S 170 20, 200 0" fill="none" stroke="#22262b" strokeWidth="22" strokeLinecap="round" />
-            <path d="M10 120 C 60 100, 70 60, 110 55 S 170 20, 200 0" fill="none" stroke="#f5a400" strokeWidth="2" strokeDasharray="8 7" />
-          </svg>
+          <Link
+            href="/find"
+            className="inline-flex h-9 shrink-0 items-center justify-center gap-1.5 rounded-full bg-accent px-4 text-sm font-semibold text-on-accent hover:bg-accent-hover"
+          >
+            Find riders <ArrowRight aria-hidden className="h-4 w-4" />
+          </Link>
         </section>
 
         {/* Composer prompt */}
